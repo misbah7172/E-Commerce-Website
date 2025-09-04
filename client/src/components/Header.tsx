@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useQuery } from "@tanstack/react-query";
 import { Search, ShoppingCart, User, Heart, Menu } from "lucide-react";
-import type { CartItem, Product, WishlistItem } from "@shared/schema";
+import type { CartItem, Product, WishlistItem, Category } from "@shared/schema";
 
 interface HeaderProps {
   onCartClick?: () => void;
@@ -31,6 +31,10 @@ export default function Header({ onCartClick }: HeaderProps) {
   const { data: wishlistItems = [] } = useQuery<(WishlistItem & { product: Product })[]>({
     queryKey: ["/api/wishlist"],
     enabled: !!user,
+  });
+
+  const { data: categories = [] } = useQuery<Category[]>({
+    queryKey: ["/api/categories"],
   });
 
   const handleSearch = (e: React.FormEvent) => {
@@ -155,27 +159,15 @@ export default function Header({ onCartClick }: HeaderProps) {
       <nav className="border-b border-border bg-muted">
         <div className="container mx-auto px-4">
           <div className="flex items-center space-x-8 py-3 overflow-x-auto">
-            <Link href="/products?category=electronics" className="whitespace-nowrap text-sm font-medium text-foreground hover:text-primary transition-colors">
-              Electronics
-            </Link>
-            <Link href="/products?category=fashion" className="whitespace-nowrap text-sm font-medium text-muted-foreground hover:text-primary transition-colors">
-              Fashion
-            </Link>
-            <Link href="/products?category=home" className="whitespace-nowrap text-sm font-medium text-muted-foreground hover:text-primary transition-colors">
-              Home & Garden
-            </Link>
-            <Link href="/products?category=sports" className="whitespace-nowrap text-sm font-medium text-muted-foreground hover:text-primary transition-colors">
-              Sports
-            </Link>
-            <Link href="/products?category=books" className="whitespace-nowrap text-sm font-medium text-muted-foreground hover:text-primary transition-colors">
-              Books
-            </Link>
-            <Link href="/products?category=beauty" className="whitespace-nowrap text-sm font-medium text-muted-foreground hover:text-primary transition-colors">
-              Beauty
-            </Link>
-            <Link href="/products?category=automotive" className="whitespace-nowrap text-sm font-medium text-muted-foreground hover:text-primary transition-colors">
-              Automotive
-            </Link>
+            {categories.map((category) => (
+              <Link 
+                key={category.id}
+                href={`/products?categoryId=${category.id}`} 
+                className="whitespace-nowrap text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
+              >
+                {category.name}
+              </Link>
+            ))}
           </div>
         </div>
       </nav>

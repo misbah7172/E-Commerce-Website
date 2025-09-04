@@ -15,6 +15,7 @@ import Orders from "@/pages/Orders";
 import Wishlist from "@/pages/Wishlist";
 import Admin from "@/pages/Admin";
 import Login from "@/pages/Login";
+import FirebaseTest from "@/pages/FirebaseTest";
 
 function Router() {
   return (
@@ -28,6 +29,7 @@ function Router() {
       <Route path="/wishlist" component={Wishlist} />
       <Route path="/admin" component={Admin} />
       <Route path="/login" component={Login} />
+      <Route path="/firebase-test" component={FirebaseTest} />
       <Route component={NotFound} />
     </Switch>
   );

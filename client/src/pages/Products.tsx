@@ -9,6 +9,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
 import { Grid, List, Filter } from "lucide-react";
+import type { Product, Category } from "@shared/schema";
 
 export default function Products() {
   const [location] = useLocation();
@@ -16,7 +17,7 @@ export default function Products() {
   
   const [filters, setFilters] = useState({
     search: urlParams.get('search') || '',
-    categoryId: urlParams.get('category') || '',
+    categoryId: urlParams.get('categoryId') || '',
     minPrice: 0,
     maxPrice: 1000,
     sortBy: 'name' as 'name' | 'price' | 'rating' | 'created',
@@ -26,11 +27,30 @@ export default function Products() {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [showFilters, setShowFilters] = useState(false);
 
-  const { data: products = [], isLoading } = useQuery({
+  const { data: products = [], isLoading } = useQuery<Product[]>({
     queryKey: ["/api/products", filters],
+    queryFn: async () => {
+      const params = new URLSearchParams();
+      
+      if (filters.search) params.append('search', filters.search);
+      if (filters.categoryId) params.append('categoryId', filters.categoryId);
+      if (filters.minPrice > 0) params.append('minPrice', filters.minPrice.toString());
+      if (filters.maxPrice < 1000) params.append('maxPrice', filters.maxPrice.toString());
+      if (filters.sortBy) params.append('sortBy', filters.sortBy);
+      if (filters.sortOrder) params.append('sortOrder', filters.sortOrder);
+      
+      const url = `/api/products${params.toString() ? '?' + params.toString() : ''}`;
+      const response = await fetch(url);
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch products');
+      }
+      
+      return response.json();
+    },
   });
 
-  const { data: categories = [] } = useQuery({
+  const { data: categories = [] } = useQuery<Category[]>({
     queryKey: ["/api/categories"],
   });
 
@@ -39,7 +59,7 @@ export default function Products() {
     setFilters(prev => ({
       ...prev,
       search: params.get('search') || '',
-      categoryId: params.get('category') || '',
+      categoryId: params.get('categoryId') || '',
     }));
   }, [location]);
 
@@ -79,7 +99,7 @@ export default function Products() {
               <div>
                 <h4 className="font-medium mb-3">Categories</h4>
                 <div className="space-y-2">
-                  {categories.map((category: any) => (
+                  {categories.map((category: Category) => (
                     <div key={category.id} className="flex items-center space-x-2">
                       <Checkbox
                         id={category.id}
@@ -212,7 +232,7 @@ export default function Products() {
                 ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
                 : "space-y-4"
             }>
-              {products.map((product: any) => (
+              {products.map((product: Product) => (
                 <ProductCard key={product.id} product={product} />
               ))}
             </div>

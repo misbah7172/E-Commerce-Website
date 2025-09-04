@@ -5,13 +5,29 @@ import { Input } from "@/components/ui/input";
 import ProductCard from "@/components/ProductCard";
 import { useQuery } from "@tanstack/react-query";
 import { Laptop, Shirt, Home, Dumbbell, Star } from "lucide-react";
+import type { Product, Category } from "@shared/schema";
 
 export default function Homepage() {
-  const { data: featuredProducts = [] } = useQuery({
+  const { data: featuredProducts = [] } = useQuery<Product[]>({
     queryKey: ["/api/products", { limit: 8, sortBy: "rating", sortOrder: "desc" }],
+    queryFn: async () => {
+      const params = new URLSearchParams();
+      params.append('limit', '8');
+      params.append('sortBy', 'rating');
+      params.append('sortOrder', 'desc');
+      
+      const url = `/api/products?${params.toString()}`;
+      const response = await fetch(url);
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch featured products');
+      }
+      
+      return response.json();
+    },
   });
 
-  const { data: categories = [] } = useQuery({
+  const { data: categories = [] } = useQuery<Category[]>({
     queryKey: ["/api/categories"],
   });
 
@@ -96,7 +112,7 @@ export default function Homepage() {
           
           {featuredProducts.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {featuredProducts.slice(0, 4).map((product: any) => (
+              {featuredProducts.slice(0, 4).map((product: Product) => (
                 <ProductCard key={product.id} product={product} />
               ))}
             </div>
