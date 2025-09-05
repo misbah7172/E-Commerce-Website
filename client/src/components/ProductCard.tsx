@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -19,6 +19,28 @@ export default function ProductCard({ product }: ProductCardProps) {
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [isInWishlist, setIsInWishlist] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  // Reset image index when product changes
+  useEffect(() => {
+    setCurrentImageIndex(0);
+  }, [product.id]);
+
+  // Image slider effect - auto-slide every 2 seconds
+  useEffect(() => {
+    if (!product.images || product.images.length === 0) return;
+
+    const interval = setInterval(() => {
+      setCurrentImageIndex((prevIndex) => {
+        // If only one image, keep cycling it (0 -> 0)
+        if (product.images!.length === 1) return 0;
+        // For multiple images, cycle through them
+        return (prevIndex + 1) % product.images!.length;
+      });
+    }, 2000); // 2 second interval
+
+    return () => clearInterval(interval);
+  }, [product.images]);
 
   const addToCartMutation = useMutation({
     mutationFn: () => apiRequest("POST", "/api/cart", {
@@ -93,13 +115,31 @@ export default function ProductCard({ product }: ProductCardProps) {
     <Card className="group hover:shadow-lg transition-shadow duration-300 overflow-hidden h-full flex flex-col" data-testid={`card-product-${product.id}`}>
       <div className="relative overflow-hidden">
         <Link href={`/products/${product.id}`}>
-          <div className="aspect-square bg-muted">
-            {product.images && product.images[0] ? (
-              <img
-                src={product.images[0]}
-                alt={product.name}
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-              />
+          <div className="aspect-square bg-muted relative overflow-hidden">
+            {product.images && product.images.length > 0 ? (
+              <div className="relative w-full h-full">
+                {/* Current Image */}
+                <img
+                  key={`${product.id}-${currentImageIndex}`}
+                  src={product.images[currentImageIndex] || product.images[0]}
+                  alt={`${product.name} - Image ${currentImageIndex + 1}`}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 product-image-slide"
+                />
+                
+                {/* Image indicators for multiple images */}
+                {product.images.length > 1 && (
+                  <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex space-x-1">
+                    {product.images.map((_, index) => (
+                      <div
+                        key={index}
+                        className={`w-1.5 h-1.5 rounded-full transition-colors duration-200 ${
+                          index === currentImageIndex ? 'bg-white' : 'bg-white/50'
+                        }`}
+                      />
+                    ))}
+                  </div>
+                )}
+              </div>
             ) : (
               <div className="w-full h-full flex items-center justify-center text-muted-foreground">
                 No Image

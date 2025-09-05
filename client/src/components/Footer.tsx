@@ -59,22 +59,6 @@ export default function Footer() {
               </a>
             </div>
           </div>
-
-          {/* Support */}
-          <div className="space-y-4">
-            <h3 className="font-semibold text-lg">Support</h3>
-            <div className="space-y-2 text-sm">
-              <a href="/help" className="block hover:text-primary transition-colors">
-                Help Center
-              </a>
-              <a href="/contact" className="block hover:text-primary transition-colors">
-                Contact Us
-              </a>
-              <a href="/returns" className="block hover:text-primary transition-colors">
-                Returns
-              </a>
-            </div>
-          </div>
         </div>
 
         <Separator className="my-6" />

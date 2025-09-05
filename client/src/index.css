@@ -148,4 +148,20 @@
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
+  
+  /* Product card image slide animation */
+  .product-image-slide {
+    animation: slideInFromRight 0.5s ease-in-out;
+  }
+  
+  @keyframes slideInFromRight {
+    from {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
 }

@@ -14,17 +14,17 @@ export default function Homepage() {
           <div className="w-full max-w-4xl mx-auto space-y-3 md:space-y-8 text-center">
             {/* Main Headline - Updated Sep 5, 2025 */}
             <div className="space-y-2 md:space-y-6">
-              <h1 style={{ textShadow: "0 1px 2px rgba(0, 0, 0, 0.5)" }} className="text-2xl md:text-6xl lg:text-8xl font-bold text-white leading-tight tracking-tight drop-shadow-lg">
+              <h1 className="text-2xl md:text-6xl lg:text-8xl font-bold text-white leading-tight tracking-tight drop-shadow-lg">
                 FOR AMAZING
               </h1>
-              <h2 style={{ textShadow: "0 1px 2px rgba(0, 0, 0, 0.5)" }} className="text-lg md:text-4xl lg:text-6xl font-light text-gray-300 leading-relaxed drop-shadow-md">
+              <h2 className="text-lg md:text-4xl lg:text-6xl font-light text-gray-300 leading-relaxed drop-shadow-md">
                 SHOPPING EXPERIENCE
               </h2>
             </div>
 
             {/* Subtitle */}
             <div className="max-w-2xl mx-auto">
-              <p style={{ textShadow: "0 1px 2px rgba(0, 0, 0, 0.5)" }} className="text-xs md:text-2xl lg:text-3xl text-gray-500 font-light leading-relaxed drop-shadow-sm text-center">
+              <p className="text-xs md:text-2xl lg:text-3xl text-gray-500 font-light leading-relaxed drop-shadow-sm text-center">
                 ShopHub - Your premium e-commerce destination. Quality products, 
                 unbeatable prices, and exceptional service.
               </p>
