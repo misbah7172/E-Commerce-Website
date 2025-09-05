@@ -107,13 +107,13 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary/5 to-secondary/5 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-primary/5 to-secondary/5 flex items-center justify-center p-4 sm:p-6 lg:p-8">
       <Card className="w-full max-w-md" data-testid="card-login">
-        <CardHeader className="space-y-1 text-center">
-          <CardTitle className="text-2xl font-bold" data-testid="text-auth-title">
+        <CardHeader className="space-y-1 text-center px-4 sm:px-6">
+          <CardTitle className="text-xl sm:text-2xl font-bold" data-testid="text-auth-title">
             {isSignUp ? "Create Account" : "Welcome Back"}
           </CardTitle>
-          <p className="text-muted-foreground" data-testid="text-auth-subtitle">
+          <p className="text-muted-foreground text-sm sm:text-base" data-testid="text-auth-subtitle">
             {isSignUp 
               ? "Sign up to start shopping with us" 
               : "Sign in to your account to continue"
@@ -121,11 +121,11 @@ export default function Login() {
           </p>
         </CardHeader>
         
-        <CardContent className="space-y-4">
+        <CardContent className="space-y-4 px-4 sm:px-6">
           <form onSubmit={handleSubmit} className="space-y-4">
             {isSignUp && (
               <div className="space-y-2">
-                <Label htmlFor="name">Full Name</Label>
+                <Label htmlFor="name" className="text-sm sm:text-base">Full Name</Label>
                 <Input
                   id="name"
                   name="name"
@@ -134,13 +134,14 @@ export default function Login() {
                   value={formData.name}
                   onChange={handleInputChange}
                   required
+                  className="h-10 sm:h-11 text-sm sm:text-base"
                   data-testid="input-name"
                 />
               </div>
             )}
             
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email" className="text-sm sm:text-base">Email</Label>
               <div className="relative">
                 <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                 <Input
@@ -148,7 +149,7 @@ export default function Login() {
                   name="email"
                   type="email"
                   placeholder="Enter your email"
-                  className="pl-10"
+                  className="pl-10 h-10 sm:h-11 text-sm sm:text-base"
                   value={formData.email}
                   onChange={handleInputChange}
                   required
@@ -158,7 +159,7 @@ export default function Login() {
             </div>
             
             <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password" className="text-sm sm:text-base">Password</Label>
               <div className="relative">
                 <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                 <Input
@@ -166,7 +167,7 @@ export default function Login() {
                   name="password"
                   type={showPassword ? "text" : "password"}
                   placeholder="Enter your password"
-                  className="pl-10 pr-10"
+                  className="pl-10 pr-10 h-10 sm:h-11 text-sm sm:text-base"
                   value={formData.password}
                   onChange={handleInputChange}
                   required
@@ -185,7 +186,7 @@ export default function Login() {
             
             {isSignUp && (
               <div className="space-y-2">
-                <Label htmlFor="confirmPassword">Confirm Password</Label>
+                <Label htmlFor="confirmPassword" className="text-sm sm:text-base">Confirm Password</Label>
                 <div className="relative">
                   <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                   <Input
@@ -193,7 +194,7 @@ export default function Login() {
                     name="confirmPassword"
                     type="password"
                     placeholder="Confirm your password"
-                    className="pl-10"
+                    className="pl-10 h-10 sm:h-11 text-sm sm:text-base"
                     value={formData.confirmPassword}
                     onChange={handleInputChange}
                     required

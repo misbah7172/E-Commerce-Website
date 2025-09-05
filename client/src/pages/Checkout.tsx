@@ -71,15 +71,15 @@ export default function Checkout() {
 
   if (isLoading) {
     return (
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         <div className="animate-pulse space-y-4">
-          <div className="h-8 bg-muted rounded w-1/4"></div>
-          <div className="grid lg:grid-cols-2 gap-8">
+          <div className="h-6 sm:h-8 bg-muted rounded w-1/4"></div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
             <div className="space-y-4">
-              <div className="h-64 bg-muted rounded"></div>
-              <div className="h-48 bg-muted rounded"></div>
+              <div className="h-48 sm:h-64 bg-muted rounded"></div>
+              <div className="h-32 sm:h-48 bg-muted rounded"></div>
             </div>
-            <div className="h-96 bg-muted rounded"></div>
+            <div className="h-64 sm:h-96 bg-muted rounded"></div>
           </div>
         </div>
       </div>
@@ -88,11 +88,11 @@ export default function Checkout() {
 
   if (cartItems.length === 0) {
     return (
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         <div className="text-center">
-          <h1 className="text-2xl font-bold mb-4">Your cart is empty</h1>
-          <p className="text-muted-foreground mb-8">Add some products to your cart before checkout.</p>
-          <Button onClick={() => navigate("/products")}>
+          <h1 className="text-xl sm:text-2xl font-bold mb-4">Your cart is empty</h1>
+          <p className="text-muted-foreground mb-6 sm:mb-8 text-sm sm:text-base">Add some products to your cart before checkout.</p>
+          <Button onClick={() => navigate("/products")} className="w-full sm:w-auto">
             Continue Shopping
           </Button>
         </div>

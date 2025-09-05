@@ -1,0 +1,316 @@
+/* Responsive Design Utilities for E-commerce Platform */
+
+/* Mobile-first approach breakpoints:
+ * xs: 0px and up (default)
+ * sm: 640px and up
+ * md: 768px and up  
+ * lg: 1024px and up
+ * xl: 1280px and up
+ * 2xl: 1536px and up
+ */
+
+/* Container responsive utilities */
+.container-responsive {
+  width: 100%;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@media (min-width: 640px) {
+  .container-responsive {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container-responsive {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+/* Grid responsive utilities */
+.grid-responsive-cards {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (min-width: 640px) {
+  .grid-responsive-cards {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .grid-responsive-cards {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 1280px) {
+  .grid-responsive-cards {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Typography responsive utilities */
+.text-responsive-title {
+  font-size: 1.5rem;
+  line-height: 2rem;
+  font-weight: 700;
+}
+
+@media (min-width: 640px) {
+  .text-responsive-title {
+    font-size: 1.875rem;
+    line-height: 2.25rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .text-responsive-title {
+    font-size: 2.25rem;
+    line-height: 2.5rem;
+  }
+}
+
+.text-responsive-subtitle {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+@media (min-width: 640px) {
+  .text-responsive-subtitle {
+    font-size: 1rem;
+    line-height: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .text-responsive-subtitle {
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+  }
+}
+
+/* Button responsive utilities */
+.button-responsive {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+@media (min-width: 640px) {
+  .button-responsive {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    line-height: 1.5rem;
+  }
+}
+
+/* Spacing responsive utilities */
+.section-padding-responsive {
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+}
+
+@media (min-width: 640px) {
+  .section-padding-responsive {
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .section-padding-responsive {
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+  }
+}
+
+/* Card responsive utilities */
+.card-responsive {
+  padding: 0.75rem;
+}
+
+@media (min-width: 640px) {
+  .card-responsive {
+    padding: 1rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .card-responsive {
+    padding: 1.5rem;
+  }
+}
+
+/* Navigation responsive utilities */
+.nav-responsive {
+  height: 3.5rem;
+}
+
+@media (min-width: 640px) {
+  .nav-responsive {
+    height: 4rem;
+  }
+}
+
+/* Form responsive utilities */
+.form-input-responsive {
+  height: 2.5rem;
+  font-size: 0.875rem;
+}
+
+@media (min-width: 640px) {
+  .form-input-responsive {
+    height: 2.75rem;
+    font-size: 1rem;
+  }
+}
+
+/* Admin panel responsive utilities */
+.admin-grid-responsive {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .admin-grid-responsive {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .admin-grid-responsive {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 1280px) {
+  .admin-grid-responsive {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Product detail responsive utilities */
+.product-detail-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+
+@media (min-width: 1024px) {
+  .product-detail-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+  }
+}
+
+/* Cart drawer responsive utilities */
+.cart-drawer-responsive {
+  width: 100%;
+  max-width: 20rem;
+}
+
+@media (min-width: 640px) {
+  .cart-drawer-responsive {
+    width: 24rem;
+    max-width: 24rem;
+  }
+}
+
+/* Hero section responsive utilities */
+.hero-responsive {
+  min-height: 31.25rem;
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+}
+
+@media (min-width: 640px) {
+  .hero-responsive {
+    min-height: 37.5rem;
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .hero-responsive {
+    min-height: 43.75rem;
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+  }
+}
+
+/* Image responsive utilities */
+.image-responsive {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+/* Flex responsive utilities */
+.flex-responsive-column {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+@media (min-width: 640px) {
+  .flex-responsive-column {
+    flex-direction: row;
+    align-items: center;
+    gap: 1.5rem;
+  }
+}
+
+/* Hide/show responsive utilities */
+.hide-mobile {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .hide-mobile {
+    display: block;
+  }
+}
+
+.show-mobile {
+  display: block;
+}
+
+@media (min-width: 768px) {
+  .show-mobile {
+    display: none;
+  }
+}
+
+/* Hover effects responsive (only on devices that support hover) */
+@media (hover: hover) {
+  .hover-responsive:hover {
+    transform: translateY(-0.125rem);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    transition: all 0.2s ease-in-out;
+  }
+}
+
+/* Focus utilities for accessibility */
+.focus-responsive:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* Animation performance optimization */
+.animation-responsive {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}

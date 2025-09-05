@@ -57,9 +57,9 @@ export default function ProductDetail() {
 
   if (isLoading) {
     return (
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         <div className="animate-pulse">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-12">
             <div className="space-y-4">
               <div className="aspect-square bg-muted rounded-lg"></div>
               <div className="grid grid-cols-4 gap-2">
@@ -69,9 +69,9 @@ export default function ProductDetail() {
               </div>
             </div>
             <div className="space-y-4">
-              <div className="h-8 bg-muted rounded"></div>
-              <div className="h-6 bg-muted rounded w-3/4"></div>
-              <div className="h-12 bg-muted rounded"></div>
+              <div className="h-6 sm:h-8 bg-muted rounded"></div>
+              <div className="h-4 sm:h-6 bg-muted rounded w-3/4"></div>
+              <div className="h-8 sm:h-12 bg-muted rounded"></div>
             </div>
           </div>
         </div>
@@ -81,11 +81,11 @@ export default function ProductDetail() {
 
   if (!product) {
     return (
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         <div className="text-center">
-          <h1 className="text-2xl font-bold mb-4">Product Not Found</h1>
+          <h1 className="text-xl sm:text-2xl font-bold mb-4">Product Not Found</h1>
           <Link href="/products">
-            <Button>Back to Products</Button>
+            <Button className="w-full sm:w-auto">Back to Products</Button>
           </Link>
         </div>
       </div>

@@ -280,12 +280,12 @@ export default function Admin() {
     return null;
   }
 
-  if (!isAdmin) {
+  if (!user || !isAdmin) {
     return (
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="text-center">
-          <h1 className="text-2xl font-bold mb-4">Access Denied</h1>
-          <p className="text-muted-foreground">You don't have permission to access the admin panel.</p>
+          <h1 className="text-xl sm:text-2xl font-bold mb-4">Access Denied</h1>
+          <p className="text-muted-foreground">You don't have permission to access this page.</p>
           <Link href="/">
             <Button className="mt-4">Go Home</Button>
           </Link>
@@ -308,18 +308,18 @@ export default function Admin() {
   });
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="max-w-7xl mx-auto">
+    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+      <div className="max-w-7xl mx-auto space-y-6 sm:space-y-8">
         {/* Header */}
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 sm:gap-0">
           <div>
-            <h1 className="text-3xl font-bold" data-testid="text-admin-title">Admin Dashboard</h1>
-            <p className="text-muted-foreground">Manage your e-commerce platform</p>
+            <h1 className="text-2xl sm:text-3xl font-bold" data-testid="text-admin-title">Admin Dashboard</h1>
+            <p className="text-muted-foreground text-sm sm:text-base">Manage your e-commerce platform</p>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4">
             <Dialog open={isAddProductOpen} onOpenChange={setIsAddProductOpen}>
               <DialogTrigger asChild>
-                <Button data-testid="button-add-product">
+                <Button data-testid="button-add-product" className="w-full sm:w-auto">
                   <Plus className="h-4 w-4 mr-2" />
                   Add Product
                 </Button>

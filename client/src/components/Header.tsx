@@ -49,43 +49,43 @@ export default function Header({ onCartClick }: HeaderProps) {
   return (
     <>
       <header className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container mx-auto px-4">
-          <div className="flex h-16 items-center justify-between">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex h-14 sm:h-16 items-center justify-between">
             {/* Logo */}
-            <Link href="/" className="flex items-center space-x-2">
-              <ShoppingCart className="h-6 w-6 text-primary" />
-              <span className="text-xl font-bold">ShopHub</span>
+            <Link href="/" className="flex items-center space-x-2 flex-shrink-0">
+              <ShoppingCart className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
+              <span className="text-lg sm:text-xl font-bold">ShopHub</span>
             </Link>
 
             {/* Search Bar - Desktop */}
-            <form onSubmit={handleSearch} className="hidden md:flex flex-1 max-w-lg mx-8">
+            <form onSubmit={handleSearch} className="hidden md:flex flex-1 max-w-lg mx-6 lg:mx-8">
               <div className="relative w-full">
                 <Input
                   type="text"
                   placeholder="Search products, brands, categories..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10"
+                  className="pl-10 text-sm"
                 />
                 <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
               </div>
             </form>
 
             {/* Navigation Actions */}
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2 sm:space-x-4">
               {user ? (
                 <>
                   {/* Cart */}
                   <Button 
                     variant="ghost" 
                     size="sm" 
-                    className="relative" 
+                    className="relative p-2" 
                     data-testid="button-cart"
                     onClick={onCartClick}
                   >
-                    <ShoppingCart className="h-5 w-5" />
+                    <ShoppingCart className="h-4 w-4 sm:h-5 sm:w-5" />
                     {cartItemCount > 0 && (
-                      <Badge className="absolute -top-2 -right-2 h-5 w-5 flex items-center justify-center p-0 text-xs">
+                      <Badge className="absolute -top-1 -right-1 h-4 w-4 sm:h-5 sm:w-5 flex items-center justify-center p-0 text-xs">
                         {cartItemCount}
                       </Badge>
                     )}
@@ -93,10 +93,10 @@ export default function Header({ onCartClick }: HeaderProps) {
 
                   {/* Wishlist */}
                   <Link href="/wishlist">
-                    <Button variant="ghost" size="sm" className="relative">
-                      <Heart className="h-5 w-5" />
+                    <Button variant="ghost" size="sm" className="relative p-2">
+                      <Heart className="h-4 w-4 sm:h-5 sm:w-5" />
                       {wishlistItems.length > 0 && (
-                        <Badge className="absolute -top-2 -right-2 h-5 w-5 flex items-center justify-center p-0 text-xs">
+                        <Badge className="absolute -top-1 -right-1 h-4 w-4 sm:h-5 sm:w-5 flex items-center justify-center p-0 text-xs">
                           {wishlistItems.length}
                         </Badge>
                       )}
@@ -106,12 +106,12 @@ export default function Header({ onCartClick }: HeaderProps) {
                   {/* User Menu */}
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" size="sm" className="flex items-center space-x-2">
-                        <User className="h-5 w-5" />
-                        <span className="hidden sm:inline">{user.displayName || user.email}</span>
+                      <Button variant="ghost" size="sm" className="flex items-center space-x-1 sm:space-x-2 p-2">
+                        <User className="h-4 w-4 sm:h-5 sm:w-5" />
+                        <span className="hidden sm:inline text-sm">{user.displayName || user.email}</span>
                       </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
+                    <DropdownMenuContent align="end" className="w-48">
                       <DropdownMenuItem asChild>
                         <Link href="/profile">My Profile</Link>
                       </DropdownMenuItem>
@@ -131,14 +131,14 @@ export default function Header({ onCartClick }: HeaderProps) {
                 </>
               ) : (
                 <Link href="/login">
-                  <Button>Sign In</Button>
+                  <Button size="sm" className="text-sm px-3 sm:px-4">Sign In</Button>
                 </Link>
               )}
             </div>
           </div>
 
           {/* Mobile Search */}
-          <div className="md:hidden pb-4">
+          <div className="md:hidden pb-3 sm:pb-4">
             <form onSubmit={handleSearch}>
               <div className="relative">
                 <Input
@@ -146,7 +146,7 @@ export default function Header({ onCartClick }: HeaderProps) {
                   placeholder="Search products..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10"
+                  className="pl-10 text-sm"
                 />
                 <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
               </div>
@@ -154,23 +154,6 @@ export default function Header({ onCartClick }: HeaderProps) {
           </div>
         </div>
       </header>
-
-      {/* Category Navigation */}
-      <nav className="border-b border-border bg-muted">
-        <div className="container mx-auto px-4">
-          <div className="flex items-center space-x-8 py-3 overflow-x-auto">
-            {categories.map((category) => (
-              <Link 
-                key={category.id}
-                href={`/products?categoryId=${category.id}`} 
-                className="whitespace-nowrap text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
-              >
-                {category.name}
-              </Link>
-            ))}
-          </div>
-        </div>
-      </nav>
     </>
   );
 }

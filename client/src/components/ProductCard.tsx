@@ -90,7 +90,7 @@ export default function ProductCard({ product }: ProductCardProps) {
     : 0;
 
   return (
-    <Card className="group hover:shadow-lg transition-shadow duration-300 overflow-hidden" data-testid={`card-product-${product.id}`}>
+    <Card className="group hover:shadow-lg transition-shadow duration-300 overflow-hidden h-full flex flex-col" data-testid={`card-product-${product.id}`}>
       <div className="relative overflow-hidden">
         <Link href={`/products/${product.id}`}>
           <div className="aspect-square bg-muted">
@@ -112,7 +112,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         <Button
           variant="ghost"
           size="sm"
-          className="absolute top-2 right-2 bg-background/80 hover:bg-background"
+          className="absolute top-2 right-2 bg-background/80 hover:bg-background h-8 w-8 p-0 rounded-full"
           onClick={handleToggleWishlist}
           data-testid={`button-wishlist-${product.id}`}
         >
@@ -121,28 +121,28 @@ export default function ProductCard({ product }: ProductCardProps) {
 
         {/* Discount Badge */}
         {discountPercentage > 0 && (
-          <Badge className="absolute top-2 left-2 bg-destructive text-destructive-foreground">
+          <Badge className="absolute top-2 left-2 bg-destructive text-destructive-foreground text-xs px-2 py-1">
             -{discountPercentage}%
           </Badge>
         )}
 
         {/* Stock Status */}
         {product.stock === 0 && (
-          <Badge className="absolute bottom-2 left-2 bg-muted text-muted-foreground">
+          <Badge className="absolute bottom-2 left-2 bg-muted text-muted-foreground text-xs px-2 py-1">
             Out of Stock
           </Badge>
         )}
       </div>
 
-      <CardContent className="p-4">
+      <CardContent className="p-3 sm:p-4 flex-1 flex flex-col">
         <Link href={`/products/${product.id}`}>
-          <h3 className="font-semibold text-sm mb-2 line-clamp-2 hover:text-primary transition-colors" data-testid={`text-product-name-${product.id}`}>
+          <h3 className="font-semibold text-sm sm:text-base mb-2 line-clamp-2 hover:text-primary transition-colors" data-testid={`text-product-name-${product.id}`}>
             {product.name}
           </h3>
         </Link>
 
         {/* Rating */}
-        <div className="flex items-center gap-1 mb-2">
+        <div className="flex items-center gap-1 mb-2 flex-1">
           <div className="flex items-center">
             {[...Array(5)].map((_, i) => (
               <Star
@@ -160,7 +160,7 @@ export default function ProductCard({ product }: ProductCardProps) {
 
         {/* Price */}
         <div className="flex items-center gap-2 mb-3">
-          <span className="text-lg font-bold text-foreground" data-testid={`text-price-${product.id}`}>
+          <span className="text-base sm:text-lg font-bold text-foreground" data-testid={`text-price-${product.id}`}>
             ${product.price}
           </span>
           {product.originalPrice && (
@@ -174,7 +174,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         <Button
           onClick={handleAddToCart}
           disabled={product.stock === 0 || addToCartMutation.isPending}
-          className="w-full"
+          className="w-full mt-auto"
           size="sm"
           data-testid={`button-add-to-cart-${product.id}`}
         >

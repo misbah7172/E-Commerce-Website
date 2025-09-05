@@ -76,13 +76,13 @@ export default function Products() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="flex gap-8">
+    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+      <div className="flex flex-col lg:flex-row gap-6 lg:gap-8">
         {/* Filters Sidebar */}
-        <div className={`w-64 ${showFilters ? 'block' : 'hidden'} lg:block`}>
+        <div className={`w-full lg:w-64 ${showFilters ? 'block' : 'hidden'} lg:block`}>
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center justify-between">
+              <CardTitle className="flex items-center justify-between text-base sm:text-lg">
                 Filters
                 <Button 
                   variant="ghost" 
@@ -94,10 +94,10 @@ export default function Products() {
                 </Button>
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-6">
+            <CardContent className="space-y-4 sm:space-y-6">
               {/* Categories */}
               <div>
-                <h4 className="font-medium mb-3">Categories</h4>
+                <h4 className="font-medium mb-3 text-sm sm:text-base">Categories</h4>
                 <div className="space-y-2">
                   {categories.map((category: Category) => (
                     <div key={category.id} className="flex items-center space-x-2">
@@ -140,26 +140,27 @@ export default function Products() {
         </div>
 
         {/* Main Content */}
+        {/* Main Content */}
         <div className="flex-1">
           {/* Header */}
-          <div className="flex justify-between items-center mb-6">
-            <div className="flex items-center gap-4">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 sm:mb-8">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
               <Button
                 variant="outline"
                 size="sm"
-                className="lg:hidden"
+                className="lg:hidden w-fit"
                 onClick={() => setShowFilters(true)}
                 data-testid="button-show-filters"
               >
                 <Filter className="h-4 w-4 mr-2" />
                 Filters
               </Button>
-              <span className="text-muted-foreground" data-testid="text-product-count">
+              <span className="text-muted-foreground text-sm sm:text-base" data-testid="text-product-count">
                 {products.length} products found
               </span>
             </div>
             
-            <div className="flex items-center gap-4">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4">
               {/* Sort */}
               <Select
                 value={`${filters.sortBy}-${filters.sortOrder}`}
@@ -172,7 +173,7 @@ export default function Products() {
                   }));
                 }}
               >
-                <SelectTrigger className="w-40" data-testid="select-sort">
+                <SelectTrigger className="w-full sm:w-40" data-testid="select-sort">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -186,12 +187,13 @@ export default function Products() {
               </Select>
 
               {/* View Mode */}
-              <div className="flex border border-border rounded-lg">
+              <div className="flex border border-border rounded-lg w-fit">
                 <Button
                   variant={viewMode === 'grid' ? 'default' : 'ghost'}
                   size="sm"
                   onClick={() => setViewMode('grid')}
                   data-testid="button-grid-view"
+                  className="rounded-r-none"
                 >
                   <Grid className="h-4 w-4" />
                 </Button>
@@ -200,36 +202,35 @@ export default function Products() {
                   size="sm"
                   onClick={() => setViewMode('list')}
                   data-testid="button-list-view"
+                  className="rounded-l-none"
                 >
                   <List className="h-4 w-4" />
                 </Button>
               </div>
             </div>
-          </div>
-
-          {/* Products Grid/List */}
+          </div>          {/* Products Grid/List */}
           {isLoading ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {[...Array(6)].map((_, i) => (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
+              {[...Array(8)].map((_, i) => (
                 <Card key={i} className="animate-pulse">
                   <div className="aspect-square bg-muted"></div>
-                  <CardContent className="p-4">
-                    <div className="h-4 bg-muted rounded mb-2"></div>
-                    <div className="h-3 bg-muted rounded mb-2"></div>
-                    <div className="h-6 bg-muted rounded"></div>
+                  <CardContent className="p-3 sm:p-4">
+                    <div className="h-3 sm:h-4 bg-muted rounded mb-2"></div>
+                    <div className="h-2 sm:h-3 bg-muted rounded mb-2"></div>
+                    <div className="h-4 sm:h-6 bg-muted rounded"></div>
                   </CardContent>
                 </Card>
               ))}
             </div>
           ) : products.length === 0 ? (
             <div className="text-center py-12">
-              <h3 className="text-lg font-semibold mb-2">No products found</h3>
-              <p className="text-muted-foreground">Try adjusting your filters or search terms.</p>
+              <h3 className="text-base sm:text-lg font-semibold mb-2">No products found</h3>
+              <p className="text-muted-foreground text-sm sm:text-base">Try adjusting your filters or search terms.</p>
             </div>
           ) : (
             <div className={
               viewMode === 'grid' 
-                ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+                ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6"
                 : "space-y-4"
             }>
               {products.map((product: Product) => (

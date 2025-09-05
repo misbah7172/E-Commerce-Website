@@ -60,17 +60,17 @@ export default function CartDrawer({ open, onOpenChange }: CartDrawerProps) {
   if (!user) {
     return (
       <Sheet open={open} onOpenChange={onOpenChange}>
-        <SheetContent className="w-96">
+        <SheetContent className="w-full sm:w-96 max-w-sm">
           <SheetHeader>
             <SheetTitle>Shopping Cart</SheetTitle>
           </SheetHeader>
           <div className="flex flex-col items-center justify-center h-full">
-            <ShoppingBag className="h-16 w-16 text-muted-foreground mb-4" />
-            <p className="text-muted-foreground text-center mb-4">
+            <ShoppingBag className="h-12 w-12 sm:h-16 sm:w-16 text-muted-foreground mb-4" />
+            <p className="text-muted-foreground text-center mb-4 text-sm sm:text-base">
               Please sign in to view your cart
             </p>
             <Link href="/login">
-              <Button>Sign In</Button>
+              <Button className="w-full sm:w-auto">Sign In</Button>
             </Link>
           </div>
         </SheetContent>
@@ -80,22 +80,22 @@ export default function CartDrawer({ open, onOpenChange }: CartDrawerProps) {
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent className="w-96 flex flex-col" data-testid="cart-drawer">
+      <SheetContent className="w-full sm:w-96 max-w-sm flex flex-col" data-testid="cart-drawer">
         <SheetHeader>
-          <SheetTitle>Shopping Cart ({cartItems.length})</SheetTitle>
+          <SheetTitle className="text-base sm:text-lg">Shopping Cart ({cartItems.length})</SheetTitle>
         </SheetHeader>
 
         {isLoading ? (
           <div className="flex-1 flex items-center justify-center">
-            <div className="animate-spin w-8 h-8 border-4 border-primary border-t-transparent rounded-full" />
+            <div className="animate-spin w-6 h-6 sm:w-8 sm:h-8 border-4 border-primary border-t-transparent rounded-full" />
           </div>
         ) : cartItems.length === 0 ? (
           <div className="flex-1 flex flex-col items-center justify-center">
-            <ShoppingBag className="h-16 w-16 text-muted-foreground mb-4" />
-            <p className="text-muted-foreground text-center mb-4">
+            <ShoppingBag className="h-12 w-12 sm:h-16 sm:w-16 text-muted-foreground mb-4" />
+            <p className="text-muted-foreground text-center mb-4 text-sm sm:text-base">
               Your cart is empty
             </p>
-            <Button onClick={() => onOpenChange(false)}>
+            <Button onClick={() => onOpenChange(false)} className="w-full sm:w-auto">
               Continue Shopping
             </Button>
           </div>
