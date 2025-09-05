@@ -438,6 +438,40 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Admin export data
+  app.get("/api/admin/export", verifyUser, requireAdmin, async (req, res) => {
+    try {
+      const exportData = await storage.exportAllData();
+      res.json(exportData);
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  // Admin get all users
+  app.get("/api/admin/users", verifyUser, requireAdmin, async (req, res) => {
+    try {
+      const users = await storage.getAllUsers();
+      res.json(users);
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  // Admin update user role
+  app.put("/api/admin/users/:id/role", verifyUser, requireAdmin, async (req, res) => {
+    try {
+      const { role } = req.body;
+      if (!['customer', 'admin'].includes(role)) {
+        return res.status(400).json({ error: 'Invalid role. Must be "customer" or "admin"' });
+      }
+      const user = await storage.updateUserRole(req.params.id, role);
+      res.json(user);
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
   // Stripe payment routes
   app.post("/api/create-payment-intent", verifyUser, async (req, res) => {
     try {

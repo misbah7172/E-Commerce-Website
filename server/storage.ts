@@ -17,6 +17,8 @@ export interface IStorage {
   getUserByEmail(email: string): Promise<User | undefined>;
   createUser(user: InsertUser): Promise<User>;
   updateUser(id: string, user: Partial<InsertUser>): Promise<User>;
+  getAllUsers(): Promise<User[]>;
+  updateUserRole(id: string, role: 'customer' | 'admin'): Promise<User>;
 
   // Products
   getProducts(filters?: {
@@ -93,6 +95,13 @@ export interface IStorage {
     totalProducts: number;
     lowStockProducts: number;
   }>;
+  exportAllData(): Promise<{
+    users: User[];
+    products: Product[];
+    categories: Category[];
+    orders: (Order & { items: OrderItem[] })[];
+    reviews: Review[];
+  }>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -119,6 +128,15 @@ export class DatabaseStorage implements IStorage {
 
   async updateUser(id: string, user: Partial<InsertUser>): Promise<User> {
     const [updatedUser] = await db.update(users).set(user).where(eq(users.id, id)).returning();
+    return updatedUser;
+  }
+
+  async getAllUsers(): Promise<User[]> {
+    return await db.select().from(users).orderBy(desc(users.createdAt));
+  }
+
+  async updateUserRole(id: string, role: 'customer' | 'admin'): Promise<User> {
+    const [updatedUser] = await db.update(users).set({ role }).where(eq(users.id, id)).returning();
     return updatedUser;
   }
 
@@ -550,6 +568,38 @@ export class DatabaseStorage implements IStorage {
       totalUsers: Number(usersResult.count) || 0,
       totalProducts: Number(productsResult.count) || 0,
       lowStockProducts: Number(lowStockResult.count) || 0,
+    };
+  }
+
+  async exportAllData(): Promise<{
+    users: User[];
+    products: Product[];
+    categories: Category[];
+    orders: (Order & { items: OrderItem[] })[];
+    reviews: Review[];
+  }> {
+    // Get all data from database
+    const allUsers = await db.select().from(users);
+    const allProducts = await db.select().from(products);
+    const allCategories = await db.select().from(categories);
+    const allReviews = await db.select().from(reviews);
+    
+    // Get orders with their items
+    const allOrders = await db.select().from(orders);
+    const allOrderItems = await db.select().from(orderItems);
+    
+    // Combine orders with their items
+    const ordersWithItems = allOrders.map(order => ({
+      ...order,
+      items: allOrderItems.filter(item => item.orderId === order.id)
+    }));
+
+    return {
+      users: allUsers,
+      products: allProducts,
+      categories: allCategories,
+      orders: ordersWithItems,
+      reviews: allReviews,
     };
   }
 }

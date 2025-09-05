@@ -2,7 +2,7 @@
 
 A modern, full-stack e-commerce platform built with React, TypeScript, Node.js, and PostgreSQL.
 
-## 🚀 Features
+##  Features
 
 - **Modern UI**: Built with React 18, TypeScript, and Tailwind CSS
 - **Authentication**: Firebase Auth with email/password and Google sign-in
@@ -14,7 +14,7 @@ A modern, full-stack e-commerce platform built with React, TypeScript, Node.js, 
 - **Admin Dashboard**: Product and order management interface
 - **Search & Filtering**: Advanced product search and category filtering
 
-## 🛠️ Tech Stack
+##  Tech Stack
 
 ### Frontend
 - **React 18** with TypeScript
@@ -37,7 +37,7 @@ A modern, full-stack e-commerce platform built with React, TypeScript, Node.js, 
 - **Firebase** for authentication
 - **Neon** for PostgreSQL hosting
 
-## 📋 Prerequisites
+##  Prerequisites
 
 - Node.js 18+ 
 - npm or yarn
@@ -46,7 +46,7 @@ A modern, full-stack e-commerce platform built with React, TypeScript, Node.js, 
 - Stripe account
 - PayPal developer account
 
-## ⚡ Quick Start
+##  Quick Start
 
 1. **Clone the repository**
    ```bash
@@ -64,9 +64,9 @@ A modern, full-stack e-commerce platform built with React, TypeScript, Node.js, 
    cp .env.example .env
    ```
    
-   📖 **Important**: See [ENVIRONMENT_SETUP.md](./ENVIRONMENT_SETUP.md) for detailed setup instructions
+    **Important**: See [ENVIRONMENT_SETUP.md](./ENVIRONMENT_SETUP.md) for detailed setup instructions
    
-   🔒 **Security**: Read [SECURITY.md](./SECURITY.md) before pushing to GitHub
+    **Security**: Read [SECURITY.md](./SECURITY.md) before pushing to GitHub
 
 4. **Set up the database**
    ```bash
@@ -88,7 +88,7 @@ A modern, full-stack e-commerce platform built with React, TypeScript, Node.js, 
    http://localhost:3000
    ```
 
-## 📁 Project Structure
+##  Project Structure
 
 ```
 EcomStorefront/
@@ -110,7 +110,7 @@ EcomStorefront/
 └── ENVIRONMENT_SETUP.md  # Detailed setup guide
 ```
 
-## 🔧 Available Scripts
+##  Available Scripts
 
 - `npm run dev` - Start development server
 - `npm run build` - Build for production
@@ -118,7 +118,7 @@ EcomStorefront/
 - `npm run check` - Type checking
 - `npm run db:push` - Push database schema
 
-## 🔐 Environment Setup
+##  Environment Setup
 
 This project requires several environment variables to be configured. See [ENVIRONMENT_SETUP.md](./ENVIRONMENT_SETUP.md) for:
 
@@ -127,7 +127,7 @@ This project requires several environment variables to be configured. See [ENVIR
 - Firebase authentication setup
 - Optional services (email, file storage, etc.)
 
-## 🛒 Core Features
+##  Core Features
 
 ### Authentication
 - Email/password registration and login
@@ -153,7 +153,7 @@ This project requires several environment variables to be configured. See [ENVIR
 - Order confirmation and tracking
 - Payment status management
 
-## 🚀 Deployment
+##  Deployment
 
 ### Environment Setup
 1. Copy `.env.example` to `.env`
@@ -204,7 +204,7 @@ PAYPAL_CLIENT_SECRET=your_paypal_client_secret
 3. Enable analytics and monitoring
 4. Set up domain and SSL
 
-## 📚 API Documentation
+##  API Documentation
 
 The backend provides REST API endpoints for:
 
@@ -215,7 +215,7 @@ The backend provides REST API endpoints for:
 - `/api/orders/*` - Order management
 - `/api/payments/*` - Payment processing
 
-## 🤝 Contributing
+##  Contributing
 
 1. Fork the repository
 2. Create a feature branch
@@ -223,19 +223,12 @@ The backend provides REST API endpoints for:
 4. Test thoroughly
 5. Submit a pull request
 
-## 📄 License
+##  License
 
 This project is licensed under the MIT License.
 
-## 🆘 Support
+##  Support
 
 - Check [ENVIRONMENT_SETUP.md](./ENVIRONMENT_SETUP.md) for setup issues
 - Review the troubleshooting section for common problems
 - Open an issue for bugs or feature requests
-
-## 🙏 Acknowledgments
-
-- [Radix UI](https://www.radix-ui.com/) for accessible components
-- [Tailwind CSS](https://tailwindcss.com/) for styling
-- [Drizzle ORM](https://orm.drizzle.team/) for database operations
-- [Stripe](https://stripe.com/) and [PayPal](https://paypal.com/) for payment processing
