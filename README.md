@@ -20,11 +20,11 @@ Get a visual overview of the ShopHub e-commerce platform:
 
 ###  Homepage
 *Modern, responsive design with featured products and categories*
-![Homepage](screenshots/homepage.png)
+![Homepage](screenshots/home.png)
 
 ###  Products Page
 *Advanced filtering, search, and grid/list view options*
-![Products Page](screenshots/products.png)
+![Products Page](screenshots/product.png)
 
 ###  Authentication
 *Clean, user-friendly login and registration interface*
@@ -33,6 +33,26 @@ Get a visual overview of the ShopHub e-commerce platform:
 ###  Admin Dashboard
 *Comprehensive admin panel for product and order management*
 ![Admin Panel](screenshots/adminpanel.png)
+
+### Cart Page
+*Cart*
+![Admin Panel](screenshots/cart.png)
+
+### Checkout
+*Checkout*
+![Admin Panel](screenshots/checkout.png)
+
+### Details
+*Product Details*
+![Admin Panel](screenshots/details.png)
+
+### Order
+*Order List*
+![Admin Panel](screenshots/order.png)
+
+### Wishlist
+*Saved Wishlist*
+![Admin Panel](screenshots/wishlist.png)
 
 ###  Key Visual Features
 - **Responsive Design**: Seamless experience across mobile, tablet, and desktop
