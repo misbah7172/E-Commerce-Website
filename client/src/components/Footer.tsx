@@ -1,17 +1,20 @@
-import { useQuery } from "@tanstack/react-query";
-import { Users, TrendingUp, Heart, Globe } from "lucide-react";
+import { Users, Heart, Globe } from "lucide-react";
 import { Separator } from "./ui/separator";
-
-interface VisitorAnalytics {
-  uniqueVisitors: number;
-  totalVisits: number;
-}
+import { useQuery } from "@tanstack/react-query";
 
 export default function Footer() {
   // Fetch visitor analytics
-  const { data: analytics } = useQuery<VisitorAnalytics>({
-    queryKey: ["/api/analytics/visitors"],
+  const { data: analytics } = useQuery({
+    queryKey: ['/api/analytics/visitors'],
+    queryFn: async () => {
+      const response = await fetch('/api/analytics/visitors');
+      if (!response.ok) {
+        throw new Error('Failed to fetch visitor analytics');
+      }
+      return response.json();
+    },
     refetchInterval: 60000, // Refresh every minute
+    staleTime: 30000, // Consider data stale after 30 seconds
   });
 
   const currentYear = new Date().getFullYear();
@@ -25,16 +28,18 @@ export default function Footer() {
           <div className="space-y-4">
             <h3 className="font-semibold text-lg flex items-center gap-2">
               <Globe className="h-5 w-5 text-primary" />
-              Site Statistics
+              Live Statistics
             </h3>
             <div className="space-y-2 text-sm text-muted-foreground">
               <div className="flex items-center gap-2">
-                <Users className="h-4 w-4" />
+                <Users className="h-4 w-4 text-blue-500" />
                 <span>Unique Visitors: {analytics?.uniqueVisitors?.toLocaleString() || '0'}</span>
               </div>
-              <div className="flex items-center gap-2">
-                <TrendingUp className="h-4 w-4" />
-                <span>Total Visits: {analytics?.totalVisits?.toLocaleString() || '0'}</span>
+            </div>
+            <div className="text-xs text-muted-foreground">
+              <div className="flex items-center gap-1">
+                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                <span>Live tracking active</span>
               </div>
             </div>
           </div>

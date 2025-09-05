@@ -305,10 +305,15 @@ export const insertCouponSchema = createInsertSchema(coupons).omit({
 // Visitor tracking table
 export const visitors = pgTable("visitors", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  browserFingerprint: text("browser_fingerprint").notNull().unique(), // Unique browser ID
   ipAddress: text("ip_address").notNull(),
   userAgent: text("user_agent"),
   country: text("country"),
   city: text("city"),
+  browserInfo: text("browser_info"), // JSON string with browser details
+  screenResolution: text("screen_resolution"),
+  timezone: text("timezone"),
+  language: text("language"),
   firstVisit: timestamp("first_visit").defaultNow().notNull(),
   lastVisit: timestamp("last_visit").defaultNow().notNull(),
   visitCount: integer("visit_count").default(1).notNull(),

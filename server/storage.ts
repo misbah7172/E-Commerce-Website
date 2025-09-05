@@ -108,6 +108,13 @@ export interface IStorage {
 
   // Visitor tracking
   trackVisitor(ipAddress: string, userAgent?: string): Promise<Visitor>;
+  trackBrowserVisitor(browserFingerprint: string, ipAddress: string, browserData: {
+    userAgent?: string;
+    browserInfo?: string;
+    screenResolution?: string;
+    timezone?: string;
+    language?: string;
+  }): Promise<Visitor>;
   getUniqueVisitorCount(): Promise<number>;
   getTotalVisitorCount(): Promise<number>;
   getSiteAnalytics(metric: string): Promise<SiteAnalytics | undefined>;
@@ -632,7 +639,7 @@ export class DatabaseStorage implements IStorage {
   // Visitor tracking methods
   async trackVisitor(ipAddress: string, userAgent?: string): Promise<Visitor> {
     try {
-      // Check if visitor already exists
+      // Check if visitor already exists by IP
       const existingVisitor = await db.select()
         .from(visitors)
         .where(eq(visitors.ipAddress, ipAddress))
@@ -650,11 +657,68 @@ export class DatabaseStorage implements IStorage {
           .returning();
         return updatedVisitor;
       } else {
-        // Create new visitor
+        // Create new visitor with placeholder fingerprint for legacy support
+        const placeholderFingerprint = 'legacy_' + ipAddress.replace(/\./g, '_') + '_' + Date.now();
         const [newVisitor] = await db.insert(visitors)
           .values({
+            browserFingerprint: placeholderFingerprint,
             ipAddress,
             userAgent,
+            firstVisit: new Date(),
+            lastVisit: new Date(),
+            visitCount: 1
+          })
+          .returning();
+        
+        return newVisitor;
+      }
+    } catch (error) {
+      console.error('Error tracking visitor:', error);
+      throw error;
+    }
+  }
+
+  async trackBrowserVisitor(browserFingerprint: string, ipAddress: string, browserData: {
+    userAgent?: string;
+    browserInfo?: string;
+    screenResolution?: string;
+    timezone?: string;
+    language?: string;
+  }): Promise<Visitor> {
+    try {
+      // Check if visitor already exists by browser fingerprint
+      const existingVisitor = await db.select()
+        .from(visitors)
+        .where(eq(visitors.browserFingerprint, browserFingerprint))
+        .limit(1);
+
+      if (existingVisitor.length > 0) {
+        // Update existing visitor
+        const [updatedVisitor] = await db.update(visitors)
+          .set({ 
+            lastVisit: new Date(),
+            visitCount: sql`${visitors.visitCount} + 1`,
+            ipAddress: ipAddress, // Update IP in case it changed
+            userAgent: browserData.userAgent || existingVisitor[0].userAgent,
+            browserInfo: browserData.browserInfo || existingVisitor[0].browserInfo,
+            screenResolution: browserData.screenResolution || existingVisitor[0].screenResolution,
+            timezone: browserData.timezone || existingVisitor[0].timezone,
+            language: browserData.language || existingVisitor[0].language,
+          })
+          .where(eq(visitors.browserFingerprint, browserFingerprint))
+          .returning();
+        return updatedVisitor;
+      } else {
+        // Create new unique visitor
+        const [newVisitor] = await db.insert(visitors)
+          .values({
+            browserFingerprint,
+            ipAddress,
+            userAgent: browserData.userAgent,
+            browserInfo: browserData.browserInfo,
+            screenResolution: browserData.screenResolution,
+            timezone: browserData.timezone,
+            language: browserData.language,
             firstVisit: new Date(),
             lastVisit: new Date(),
             visitCount: 1
@@ -667,7 +731,7 @@ export class DatabaseStorage implements IStorage {
         return newVisitor;
       }
     } catch (error) {
-      console.error('Error tracking visitor:', error);
+      console.error('Error tracking browser visitor:', error);
       throw error;
     }
   }

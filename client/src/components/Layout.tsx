@@ -1,4 +1,5 @@
 import { ReactNode, useState } from "react";
+import { useVisitorTracking } from "@/hooks/useVisitorTracking";
 import Header from "./Header";
 import CartDrawer from "./CartDrawer";
 import Footer from "./Footer";
@@ -9,6 +10,9 @@ interface LayoutProps {
 
 export default function Layout({ children }: LayoutProps) {
   const [cartOpen, setCartOpen] = useState(false);
+  
+  // Initialize visitor tracking inside the QueryClientProvider context
+  useVisitorTracking();
 
   return (
     <div className="min-h-screen bg-background flex flex-col">

@@ -128,11 +128,94 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const uniqueCount = await storage.getUniqueVisitorCount();
       const totalCount = await storage.getTotalVisitorCount();
       
+      console.log('Analytics requested:', { uniqueCount, totalCount });
+      
       res.json({
         uniqueVisitors: uniqueCount,
         totalVisits: totalCount
       });
     } catch (error: any) {
+      console.error('Error fetching analytics:', error);
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  // Enhanced client-side visitor tracking endpoint (optional)
+  app.post("/api/analytics/client-visit", async (req, res) => {
+    try {
+      const { visitorId, isNewVisitor, browserFingerprint, visitCount, timestamp } = req.body;
+      
+      // Log enhanced visitor data for analytics (optional)
+      console.log('Enhanced visitor tracking:', {
+        visitorId,
+        isNewVisitor,
+        browserFingerprint: browserFingerprint?.substring(0, 10) + '...', // Truncate for privacy
+        visitCount,
+        timestamp,
+        ip: req.ip
+      });
+      
+      // You could store this enhanced data in a separate table if needed
+      // For now, we'll just acknowledge the tracking
+      res.json({ 
+        success: true, 
+        message: 'Client-side visit tracked',
+        serverTimestamp: new Date().toISOString()
+      });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  // Browser fingerprint tracking endpoint
+  app.post("/api/analytics/browser-visit", async (req, res) => {
+    try {
+      const { 
+        browserFingerprint, 
+        isNewVisitor, 
+        browserInfo, 
+        screenResolution, 
+        timezone, 
+        language, 
+        visitCount, 
+        timestamp 
+      } = req.body;
+      
+      const clientIp = req.ip || 
+                      req.connection.remoteAddress || 
+                      req.socket.remoteAddress || 
+                      (req.connection as any)?.socket?.remoteAddress ||
+                      req.headers['x-forwarded-for'] ||
+                      req.headers['x-real-ip'] || 
+                      'unknown';
+      
+      const userAgent = req.headers['user-agent'];
+
+      // Track visitor using browser fingerprint
+      const visitor = await storage.trackBrowserVisitor(browserFingerprint, String(clientIp), {
+        userAgent,
+        browserInfo,
+        screenResolution,
+        timezone,
+        language,
+      });
+
+      console.log('Browser fingerprint tracked:', {
+        fingerprint: browserFingerprint.substring(0, 10) + '...',
+        isNewVisitor,
+        visitCount: visitor.visitCount,
+        ip: String(clientIp).substring(0, 8) + '...',
+      });
+
+      res.json({ 
+        success: true, 
+        message: 'Browser visit tracked successfully',
+        isNewVisitor: visitor.visitCount === 1,
+        totalVisits: visitor.visitCount,
+        serverTimestamp: new Date().toISOString()
+      });
+    } catch (error: any) {
+      console.error('Browser fingerprint tracking error:', error);
       res.status(500).json({ error: error.message });
     }
   });
