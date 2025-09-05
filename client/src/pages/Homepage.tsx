@@ -34,7 +34,7 @@ export default function Homepage() {
       <section className="bg-white py-20 lg:py-32">
         <div className="container mx-auto px-4 text-center">
           <div className="max-w-4xl mx-auto space-y-8">
-            {/* Main Headline */}
+            {/* Main Headline - Updated Sep 5, 2025 */}
             <div className="space-y-4">
               <h1 className="text-5xl lg:text-7xl font-bold text-gray-900 leading-tight tracking-tight">
                 FOR AMAZING
@@ -48,7 +48,7 @@ export default function Homepage() {
             <div className="max-w-2xl mx-auto">
               <p className="text-xl lg:text-2xl text-gray-600 font-light leading-relaxed">
                 ShopHub - Your premium e-commerce destination. Quality products, 
-                unbeatable prices, and exceptional service.
+                unbeatable prices, and exceptional service. (Updated Sep 5, 2025)
               </p>
               <Link href="/products">
                 <Button className="mt-8 bg-black text-white hover:bg-gray-800 px-8 py-4 text-lg font-medium rounded-none">
