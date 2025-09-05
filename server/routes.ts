@@ -80,6 +80,49 @@ export async function registerRoutes(app: Express): Promise<Server> {
     next();
   };
 
+  // Visitor tracking middleware - runs on every request
+  app.use(async (req, res, next) => {
+    try {
+      // Skip tracking for API calls, static assets, and health checks
+      if (req.path.startsWith('/api') || 
+          req.path.includes('.') || 
+          req.path === '/health') {
+        return next();
+      }
+
+      const clientIp = req.ip || 
+                      req.connection.remoteAddress || 
+                      req.socket.remoteAddress || 
+                      (req.connection as any)?.socket?.remoteAddress ||
+                      req.headers['x-forwarded-for'] ||
+                      req.headers['x-real-ip'] || 
+                      'unknown';
+      
+      const userAgent = req.headers['user-agent'];
+      
+      // Track visitor in background (don't wait for completion)
+      storage.trackVisitor(String(clientIp), userAgent).catch(console.error);
+    } catch (error) {
+      console.error('Error in visitor tracking middleware:', error);
+    }
+    next();
+  });
+
+  // Visitor analytics API endpoints
+  app.get("/api/analytics/visitors", async (req, res) => {
+    try {
+      const uniqueCount = await storage.getUniqueVisitorCount();
+      const totalCount = await storage.getTotalVisitorCount();
+      
+      res.json({
+        uniqueVisitors: uniqueCount,
+        totalVisits: totalCount
+      });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
   // Auth routes
   app.post("/api/auth/register", async (req, res) => {
     try {

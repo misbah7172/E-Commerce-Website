@@ -302,6 +302,31 @@ export const insertCouponSchema = createInsertSchema(coupons).omit({
   usageCount: true,
 });
 
+// Visitor tracking table
+export const visitors = pgTable("visitors", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  ipAddress: text("ip_address").notNull(),
+  userAgent: text("user_agent"),
+  country: text("country"),
+  city: text("city"),
+  firstVisit: timestamp("first_visit").defaultNow().notNull(),
+  lastVisit: timestamp("last_visit").defaultNow().notNull(),
+  visitCount: integer("visit_count").default(1).notNull(),
+});
+
+// Site analytics table for storing aggregated data
+export const siteAnalytics = pgTable("site_analytics", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  metric: varchar("metric").notNull(), // 'unique_visitors', 'page_views', etc.
+  value: integer("value").default(0).notNull(),
+  date: timestamp("date").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+// Insert schemas for visitor tracking
+export const insertVisitorSchema = createInsertSchema(visitors);
+export const insertSiteAnalyticsSchema = createInsertSchema(siteAnalytics);
+
 // Types
 export type User = typeof users.$inferSelect;
 export type InsertUser = z.infer<typeof insertUserSchema>;
@@ -324,3 +349,7 @@ export type Review = typeof reviews.$inferSelect;
 export type InsertReview = z.infer<typeof insertReviewSchema>;
 export type Coupon = typeof coupons.$inferSelect;
 export type InsertCoupon = z.infer<typeof insertCouponSchema>;
+export type Visitor = typeof visitors.$inferSelect;
+export type InsertVisitor = z.infer<typeof insertVisitorSchema>;
+export type SiteAnalytics = typeof siteAnalytics.$inferSelect;
+export type InsertSiteAnalytics = z.infer<typeof insertSiteAnalyticsSchema>;

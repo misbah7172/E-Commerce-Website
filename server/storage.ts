@@ -1,11 +1,12 @@
 import { 
   users, products, categories, addresses, cartItems, wishlistItems, 
-  orders, orderItems, reviews, coupons, productVariants,
+  orders, orderItems, reviews, coupons, productVariants, visitors, siteAnalytics,
   type User, type InsertUser, type Product, type InsertProduct,
   type Category, type InsertCategory, type Address, type InsertAddress,
   type CartItem, type InsertCartItem, type WishlistItem, type InsertWishlistItem,
   type Order, type InsertOrder, type OrderItem, type InsertOrderItem,
-  type Review, type InsertReview, type Coupon, type InsertCoupon
+  type Review, type InsertReview, type Coupon, type InsertCoupon,
+  type Visitor, type InsertVisitor, type SiteAnalytics, type InsertSiteAnalytics
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, and, desc, asc, like, gte, lte, inArray, sql } from "drizzle-orm";
@@ -104,6 +105,13 @@ export interface IStorage {
     orders: (Order & { items: OrderItem[] })[];
     reviews: Review[];
   }>;
+
+  // Visitor tracking
+  trackVisitor(ipAddress: string, userAgent?: string): Promise<Visitor>;
+  getUniqueVisitorCount(): Promise<number>;
+  getTotalVisitorCount(): Promise<number>;
+  getSiteAnalytics(metric: string): Promise<SiteAnalytics | undefined>;
+  updateSiteAnalytics(metric: string, value: number): Promise<SiteAnalytics>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -619,6 +627,106 @@ export class DatabaseStorage implements IStorage {
       orders: ordersWithItems,
       reviews: allReviews,
     };
+  }
+
+  // Visitor tracking methods
+  async trackVisitor(ipAddress: string, userAgent?: string): Promise<Visitor> {
+    try {
+      // Check if visitor already exists
+      const existingVisitor = await db.select()
+        .from(visitors)
+        .where(eq(visitors.ipAddress, ipAddress))
+        .limit(1);
+
+      if (existingVisitor.length > 0) {
+        // Update existing visitor
+        const [updatedVisitor] = await db.update(visitors)
+          .set({ 
+            lastVisit: new Date(),
+            visitCount: sql`${visitors.visitCount} + 1`,
+            userAgent: userAgent || existingVisitor[0].userAgent
+          })
+          .where(eq(visitors.ipAddress, ipAddress))
+          .returning();
+        return updatedVisitor;
+      } else {
+        // Create new visitor
+        const [newVisitor] = await db.insert(visitors)
+          .values({
+            ipAddress,
+            userAgent,
+            firstVisit: new Date(),
+            lastVisit: new Date(),
+            visitCount: 1
+          })
+          .returning();
+        
+        // Update unique visitor count in analytics
+        await this.updateSiteAnalytics('unique_visitors', await this.getUniqueVisitorCount());
+        
+        return newVisitor;
+      }
+    } catch (error) {
+      console.error('Error tracking visitor:', error);
+      throw error;
+    }
+  }
+
+  async getUniqueVisitorCount(): Promise<number> {
+    try {
+      const result = await db.select({ count: sql`count(*)` }).from(visitors);
+      return Number(result[0]?.count || 0);
+    } catch (error) {
+      console.error('Error getting unique visitor count:', error);
+      return 0;
+    }
+  }
+
+  async getTotalVisitorCount(): Promise<number> {
+    try {
+      const result = await db.select({ 
+        totalVisits: sql`sum(${visitors.visitCount})` 
+      }).from(visitors);
+      return Number(result[0]?.totalVisits || 0);
+    } catch (error) {
+      console.error('Error getting total visitor count:', error);
+      return 0;
+    }
+  }
+
+  async getSiteAnalytics(metric: string): Promise<SiteAnalytics | undefined> {
+    try {
+      const result = await db.select()
+        .from(siteAnalytics)
+        .where(eq(siteAnalytics.metric, metric))
+        .limit(1);
+      return result[0];
+    } catch (error) {
+      console.error('Error getting site analytics:', error);
+      return undefined;
+    }
+  }
+
+  async updateSiteAnalytics(metric: string, value: number): Promise<SiteAnalytics> {
+    try {
+      const existing = await this.getSiteAnalytics(metric);
+      
+      if (existing) {
+        const [updated] = await db.update(siteAnalytics)
+          .set({ value, updatedAt: new Date() })
+          .where(eq(siteAnalytics.metric, metric))
+          .returning();
+        return updated;
+      } else {
+        const [created] = await db.insert(siteAnalytics)
+          .values({ metric, value, date: new Date(), updatedAt: new Date() })
+          .returning();
+        return created;
+      }
+    } catch (error) {
+      console.error('Error updating site analytics:', error);
+      throw error;
+    }
   }
 }
 

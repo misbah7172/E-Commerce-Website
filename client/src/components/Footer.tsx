@@ -1,0 +1,110 @@
+import { useQuery } from "@tanstack/react-query";
+import { Users, TrendingUp, Heart, Globe } from "lucide-react";
+import { Separator } from "./ui/separator";
+
+interface VisitorAnalytics {
+  uniqueVisitors: number;
+  totalVisits: number;
+}
+
+export default function Footer() {
+  // Fetch visitor analytics
+  const { data: analytics } = useQuery<VisitorAnalytics>({
+    queryKey: ["/api/analytics/visitors"],
+    refetchInterval: 60000, // Refresh every minute
+  });
+
+  const currentYear = new Date().getFullYear();
+
+  return (
+    <footer className="bg-background border-t border-border mt-auto">
+      <div className="container mx-auto px-4 py-8">
+        {/* Top section with visitor count and links */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+          {/* Visitor Statistics */}
+          <div className="space-y-4">
+            <h3 className="font-semibold text-lg flex items-center gap-2">
+              <Globe className="h-5 w-5 text-primary" />
+              Site Statistics
+            </h3>
+            <div className="space-y-2 text-sm text-muted-foreground">
+              <div className="flex items-center gap-2">
+                <Users className="h-4 w-4" />
+                <span>Unique Visitors: {analytics?.uniqueVisitors?.toLocaleString() || '0'}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <TrendingUp className="h-4 w-4" />
+                <span>Total Visits: {analytics?.totalVisits?.toLocaleString() || '0'}</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Quick Links */}
+          <div className="space-y-4">
+            <h3 className="font-semibold text-lg">Quick Links</h3>
+            <div className="space-y-2 text-sm">
+              <a href="/" className="block hover:text-primary transition-colors">
+                Home
+              </a>
+              <a href="/products" className="block hover:text-primary transition-colors">
+                Products
+              </a>
+              <a href="/login" className="block hover:text-primary transition-colors">
+                Account
+              </a>
+            </div>
+          </div>
+
+          {/* Categories */}
+          <div className="space-y-4">
+            <h3 className="font-semibold text-lg">Categories</h3>
+            <div className="space-y-2 text-sm">
+              <a href="/products?category=electronics" className="block hover:text-primary transition-colors">
+                Electronics
+              </a>
+              <a href="/products?category=clothing" className="block hover:text-primary transition-colors">
+                Clothing
+              </a>
+              <a href="/products?category=books" className="block hover:text-primary transition-colors">
+                Books
+              </a>
+            </div>
+          </div>
+
+          {/* Support */}
+          <div className="space-y-4">
+            <h3 className="font-semibold text-lg">Support</h3>
+            <div className="space-y-2 text-sm">
+              <a href="/help" className="block hover:text-primary transition-colors">
+                Help Center
+              </a>
+              <a href="/contact" className="block hover:text-primary transition-colors">
+                Contact Us
+              </a>
+              <a href="/returns" className="block hover:text-primary transition-colors">
+                Returns
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <Separator className="my-6" />
+
+        {/* Bottom section with copyright */}
+        <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
+          <div className="flex items-center gap-2">
+            <Heart className="h-4 w-4 text-red-500" />
+            <span>Made with love for online shopping</span>
+          </div>
+          
+          <div className="text-center md:text-right">
+            <p>&copy; {currentYear} ShopHub. All rights reserved.</p>
+            <p className="text-xs mt-1">
+              Tracking {analytics?.uniqueVisitors?.toLocaleString() || '0'} unique visitors from around the world
+            </p>
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+}
