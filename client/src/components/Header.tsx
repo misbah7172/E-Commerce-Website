@@ -57,9 +57,9 @@ export default function Header({ onCartClick }: HeaderProps) {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex h-14 sm:h-16 items-center justify-between">
             {/* Logo */}
-            <Link href="/" className="flex items-center space-x-2 flex-shrink-0">
-              <ShoppingCart className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
-              <span className="text-lg sm:text-xl font-bold">ShopHub</span>
+            <Link href="/" className="flex items-center space-x-2 flex-shrink-0 group">
+              <ShoppingCart className="h-5 w-5 sm:h-6 sm:w-6 text-primary group-hover:scale-110 transition-transform duration-300" />
+              <span className="text-lg sm:text-xl font-bold hover:scale-105 transition-transform duration-300">ShopHub</span>
             </Link>
 
             {/* Search Bar - Desktop */}

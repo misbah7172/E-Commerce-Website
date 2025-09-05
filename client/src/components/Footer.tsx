@@ -20,25 +20,25 @@ export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-background border-t border-border mt-auto">
+    <footer className="bg-cyan-500 border-t border-border mt-auto">
       <div className="container mx-auto px-4 py-8">
         {/* Top section with visitor count and links */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
           {/* Visitor Statistics */}
           <div className="space-y-4">
-            <h3 className="font-semibold text-lg flex items-center gap-2">
-              <Globe className="h-5 w-5 text-primary" />
+            <h3 className="font-semibold text-lg flex items-center gap-2 text-white">
+              <Globe className="h-5 w-5 text-white" />
               Live Statistics
             </h3>
-            <div className="space-y-2 text-sm text-muted-foreground">
+            <div className="space-y-2 text-sm text-white/90">
               <div className="flex items-center gap-2">
-                <Users className="h-4 w-4 text-blue-500" />
+                <Users className="h-4 w-4 text-accent" />
                 <span>Unique Visitors: {analytics?.uniqueVisitors?.toLocaleString() || '0'}</span>
               </div>
             </div>
-            <div className="text-xs text-muted-foreground">
+            <div className="text-xs text-white/80">
               <div className="flex items-center gap-1">
-                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                <div className="w-2 h-2 bg-accent rounded-full animate-pulse"></div>
                 <span>Live tracking active</span>
               </div>
             </div>
@@ -46,8 +46,8 @@ export default function Footer() {
 
           {/* Quick Links */}
           <div className="space-y-4">
-            <h3 className="font-semibold text-lg">Quick Links</h3>
-            <div className="space-y-2 text-sm">
+            <h3 className="font-semibold text-lg text-white">Quick Links</h3>
+            <div className="space-y-2 text-sm text-white/90">
               <a href="/" className="block hover:text-primary transition-colors">
                 Home
               </a>

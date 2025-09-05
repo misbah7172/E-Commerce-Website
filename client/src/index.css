@@ -3,49 +3,85 @@
 @tailwind utilities;
 
 :root {
-  --background: hsl(210, 40%, 98%);
-  --foreground: hsl(210, 40%, 8%);
-  --card: hsl(210, 40%, 99%);
-  --card-foreground: hsl(210, 40%, 15%);
-  --popover: hsl(210, 40%, 99%);
-  --popover-foreground: hsl(210, 40%, 8%);
-  --primary: hsl(214, 84%, 56%);
-  --primary-foreground: hsl(210, 40%, 98%);
-  --secondary: hsl(160, 84%, 39%);
-  --secondary-foreground: hsl(210, 40%, 98%);
-  --muted: hsl(214, 32%, 91%);
-  --muted-foreground: hsl(215, 25%, 27%);
-  --accent: hsl(20, 90.6%, 48.2%);
-  --accent-foreground: hsl(210, 40%, 98%);
+  /* Melula-inspired colorful theme */
+  --background: hsl(0, 0%, 100%);
+  --foreground: hsl(220, 13%, 18%);
+  --card: hsl(0, 0%, 100%);
+  --card-foreground: hsl(220, 13%, 18%);
+  --popover: hsl(0, 0%, 100%);
+  --popover-foreground: hsl(220, 13%, 18%);
+  
+  /* Vibrant primary colors inspired by Melula's playful palette */
+  --primary: hsl(340, 82%, 52%); /* Vibrant pink/magenta */
+  --primary-foreground: hsl(0, 0%, 100%);
+  --secondary: hsl(200, 98%, 39%); /* Bright blue */
+  --secondary-foreground: hsl(0, 0%, 100%);
+  
+  /* Colorful accents */
+  --accent: hsl(45, 93%, 47%); /* Sunny yellow */
+  --accent-foreground: hsl(220, 13%, 18%);
+  --success: hsl(142, 76%, 36%); /* Fresh green */
+  --success-foreground: hsl(0, 0%, 100%);
+  --warning: hsl(32, 95%, 44%); /* Vibrant orange */
+  --warning-foreground: hsl(0, 0%, 100%);
+  
+  /* Neutral colors */
+  --muted: hsl(220, 13%, 95%);
+  --muted-foreground: hsl(220, 13%, 46%);
   --destructive: hsl(0, 84%, 60%);
-  --destructive-foreground: hsl(210, 40%, 98%);
-  --border: hsl(214, 32%, 91%);
-  --input: hsl(214, 32%, 91%);
-  --ring: hsl(214, 84%, 56%);
-  --radius: 0.5rem;
-  --font-sans: 'Inter', system-ui, sans-serif;
+  --destructive-foreground: hsl(0, 0%, 100%);
+  --border: hsl(220, 13%, 91%);
+  --input: hsl(220, 13%, 91%);
+  --ring: hsl(340, 82%, 52%);
+  --radius: 0.75rem;
+  
+  /* Typography */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  
+  /* Additional Melula-inspired colors */
+  --melula-coral: hsl(14, 91%, 60%);
+  --melula-purple: hsl(280, 87%, 65%);
+  --melula-teal: hsl(180, 77%, 47%);
+  --melula-lime: hsl(75, 85%, 60%);
 }
 
 .dark {
-  --background: hsl(210, 40%, 7%);
-  --foreground: hsl(210, 40%, 95%);
-  --card: hsl(210, 40%, 8%);
-  --card-foreground: hsl(210, 40%, 95%);
-  --popover: hsl(210, 40%, 8%);
-  --popover-foreground: hsl(210, 40%, 95%);
-  --primary: hsl(214, 84%, 56%);
-  --primary-foreground: hsl(210, 40%, 98%);
-  --secondary: hsl(215, 25%, 27%);
-  --secondary-foreground: hsl(210, 40%, 95%);
-  --muted: hsl(215, 25%, 27%);
-  --muted-foreground: hsl(214, 32%, 65%);
-  --accent: hsl(160, 84%, 39%);
-  --accent-foreground: hsl(210, 40%, 98%);
-  --destructive: hsl(0, 84%, 60%);
-  --destructive-foreground: hsl(210, 40%, 98%);
-  --border: hsl(215, 25%, 27%);
-  --input: hsl(215, 25%, 27%);
-  --ring: hsl(214, 84%, 56%);
+  /* Dark mode with maintained colorful accents */
+  --background: hsl(220, 13%, 9%);
+  --foreground: hsl(220, 13%, 95%);
+  --card: hsl(220, 13%, 12%);
+  --card-foreground: hsl(220, 13%, 95%);
+  --popover: hsl(220, 13%, 12%);
+  --popover-foreground: hsl(220, 13%, 95%);
+  
+  /* Slightly muted but still vibrant colors for dark mode */
+  --primary: hsl(340, 75%, 55%); /* Slightly muted pink */
+  --primary-foreground: hsl(0, 0%, 100%);
+  --secondary: hsl(200, 85%, 45%); /* Slightly muted blue */
+  --secondary-foreground: hsl(0, 0%, 100%);
+  
+  /* Adapted colorful accents for dark mode */
+  --accent: hsl(45, 85%, 55%); /* Slightly muted yellow */
+  --accent-foreground: hsl(220, 13%, 9%);
+  --success: hsl(142, 70%, 40%); /* Adapted green */
+  --success-foreground: hsl(0, 0%, 100%);
+  --warning: hsl(32, 90%, 50%); /* Adapted orange */
+  --warning-foreground: hsl(0, 0%, 100%);
+  
+  /* Dark mode neutrals */
+  --muted: hsl(220, 13%, 15%);
+  --muted-foreground: hsl(220, 13%, 65%);
+  --destructive: hsl(0, 75%, 55%);
+  --destructive-foreground: hsl(0, 0%, 100%);
+  --border: hsl(220, 13%, 15%);
+  --input: hsl(220, 13%, 15%);
+  --ring: hsl(340, 75%, 55%);
+  
+  /* Adapted Melula colors for dark mode */
+  --melula-coral: hsl(14, 85%, 65%);
+  --melula-purple: hsl(280, 80%, 70%);
+  --melula-teal: hsl(180, 70%, 55%);
+  --melula-lime: hsl(75, 80%, 65%);
 }
 
 @layer base {
@@ -73,5 +109,43 @@
   
   .product-image {
     transition: transform 0.3s ease-in-out;
+  }
+}
+
+@layer components {
+  /* Melula-inspired components */
+  .melula-gradient {
+    background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
+  }
+  
+  .melula-button {
+    @apply bg-primary hover:opacity-90 text-primary-foreground font-medium px-6 py-3 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl;
+  }
+  
+  .melula-card {
+    @apply bg-card border border-border rounded-2xl p-6 shadow-sm hover:shadow-lg transition-all duration-300;
+  }
+  
+  .melula-badge {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-accent text-accent-foreground;
+  }
+  
+  .melula-input {
+    @apply w-full px-4 py-3 border border-border rounded-xl bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:border-primary transition-colors;
+  }
+  
+  .colorful-border {
+    border-image: linear-gradient(45deg, var(--primary), var(--secondary), var(--accent), var(--melula-coral)) 1;
+  }
+  
+  .playful-shadow {
+    box-shadow: 0 4px 20px rgba(255, 50, 150, 0.15), 0 0 0 1px rgba(255, 50, 150, 0.05);
+  }
+  
+  .rainbow-text {
+    background: linear-gradient(45deg, var(--primary), var(--secondary), var(--accent), var(--melula-coral), var(--melula-purple));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
 }

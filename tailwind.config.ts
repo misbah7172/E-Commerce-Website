@@ -37,6 +37,14 @@ export default {
           DEFAULT: "var(--accent)",
           foreground: "var(--accent-foreground)",
         },
+        success: {
+          DEFAULT: "var(--success)",
+          foreground: "var(--success-foreground)",
+        },
+        warning: {
+          DEFAULT: "var(--warning)",
+          foreground: "var(--warning-foreground)",
+        },
         destructive: {
           DEFAULT: "var(--destructive)",
           foreground: "var(--destructive-foreground)",
@@ -44,6 +52,13 @@ export default {
         border: "var(--border)",
         input: "var(--input)",
         ring: "var(--ring)",
+        // Melula-inspired colorful palette
+        melula: {
+          coral: "var(--melula-coral)",
+          purple: "var(--melula-purple)",
+          teal: "var(--melula-teal)",
+          lime: "var(--melula-lime)",
+        },
         chart: {
           "1": "var(--chart-1)",
           "2": "var(--chart-2)",
