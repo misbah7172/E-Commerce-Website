@@ -108,6 +108,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
     next();
   });
 
+  // Health check endpoint for Render
+  app.get("/api/health", async (req, res) => {
+    try {
+      res.status(200).json({ 
+        status: "ok", 
+        timestamp: new Date().toISOString(),
+        version: "1.0.0",
+        message: "Homepage redesign deployed - Sep 5, 2025"
+      });
+    } catch (error: any) {
+      res.status(500).json({ status: "error", error: error.message });
+    }
+  });
+
   // Visitor analytics API endpoints
   app.get("/api/analytics/visitors", async (req, res) => {
     try {
