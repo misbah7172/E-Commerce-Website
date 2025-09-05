@@ -98,7 +98,7 @@ export default function Footer() {
           </div>
           
           <div className="text-center md:text-right">
-            <p>&copy; {currentYear} ShopHub. All rights reserved.</p>
+            <p>&copy; {currentYear} ShopHub. All rights reserved by Misbah.</p>
             <p className="text-xs mt-1">
               Tracking {analytics?.uniqueVisitors?.toLocaleString() || '0'} unique visitors from around the world
             </p>
