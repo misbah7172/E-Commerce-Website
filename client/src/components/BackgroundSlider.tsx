@@ -31,15 +31,14 @@ export default function BackgroundSlider({ children, className = "" }: Backgroun
 
   return (
     <section className={`relative overflow-hidden ${className}`}>
-      {/* Background Images with sliding effect */}
-      <div className="absolute inset-0 flex">
+      {/* Background Images with fade in/out effect */}
+      <div className="absolute inset-0">
         {heroImages.map((image, index) => (
           <div
             key={index}
-            className="absolute inset-0 w-full h-full transition-transform duration-1000 ease-in-out"
-            style={{
-              transform: `translateX(${(index - currentImageIndex) * 100}%)`
-            }}
+            className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
+              index === currentImageIndex ? "opacity-100" : "opacity-0"
+            }`}
           >
             <img
               src={image}
@@ -64,22 +63,6 @@ export default function BackgroundSlider({ children, className = "" }: Backgroun
         <div className="w-full">
           {children}
         </div>
-      </div>
-
-      {/* Slide indicators */}
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-3 z-20">
-        {heroImages.map((_, index) => (
-          <button
-            key={index}
-            onClick={() => setCurrentImageIndex(index)}
-            className={`w-4 h-4 rounded-full transition-all duration-300 border-2 border-white shadow-lg ${
-              index === currentImageIndex 
-                ? "bg-black border-white" 
-                : "bg-white/50 hover:bg-white/80"
-            }`}
-            aria-label={`Go to slide ${index + 1}`}
-          />
-        ))}
       </div>
     </section>
   );

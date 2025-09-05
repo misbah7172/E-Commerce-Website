@@ -60,22 +60,6 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Categories */}
-          <div className="space-y-4">
-            <h3 className="font-semibold text-lg">Categories</h3>
-            <div className="space-y-2 text-sm">
-              <a href="/products?category=electronics" className="block hover:text-primary transition-colors">
-                Electronics
-              </a>
-              <a href="/products?category=clothing" className="block hover:text-primary transition-colors">
-                Clothing
-              </a>
-              <a href="/products?category=books" className="block hover:text-primary transition-colors">
-                Books
-              </a>
-            </div>
-          </div>
-
           {/* Support */}
           <div className="space-y-4">
             <h3 className="font-semibold text-lg">Support</h3>
