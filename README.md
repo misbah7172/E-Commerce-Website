@@ -2,6 +2,23 @@
 
 A modern, full-stack e-commerce platform built with React, TypeScript, Node.js, and PostgreSQL.
 
+##  Table of Contents
+
+- [Features](#features)
+- [Screenshots](#screenshots)
+- [Tech Stack](#tech-stack)
+- [Prerequisites](#prerequisites)
+- [Quick Start](#quick-start)
+- [Project Structure](#project-structure)
+- [Available Scripts](#available-scripts)
+- [Environment Setup](#environment-setup)
+- [Core Features](#core-features)
+- [Deployment](#deployment)
+- [API Documentation](#api-documentation)
+- [Contributing](#contributing)
+- [License](#license)
+- [Support](#support)
+
 ##  Features
 
 - **Modern UI**: Built with React 18, TypeScript, and Tailwind CSS
@@ -13,6 +30,42 @@ A modern, full-stack e-commerce platform built with React, TypeScript, Node.js, 
 - **Responsive Design**: Mobile-first design with responsive layouts
 - **Admin Dashboard**: Product and order management interface
 - **Search & Filtering**: Advanced product search and category filtering
+
+## 📸 Screenshots
+
+Get a visual overview of the ShopHub e-commerce platform:
+
+###  Homepage
+*Modern, responsive design with featured products and categories*
+![Homepage](screenshots/homepage.png)
+
+###  Products Page
+*Advanced filtering, search, and grid/list view options*
+![Products Page](screenshots/products.png)
+
+###  Authentication
+*Clean, user-friendly login and registration interface*
+![Login Page](screenshots/login.png)
+
+###  Admin Dashboard
+*Comprehensive admin panel for product and order management*
+![Admin Panel](screenshots/adminpanel.png)
+
+###  Key Visual Features
+- **Responsive Design**: Seamless experience across mobile, tablet, and desktop
+- **Modern UI**: Clean, professional interface with intuitive navigation
+- **Interactive Elements**: Hover effects, smooth animations, and touch-friendly controls
+- **Accessibility**: WCAG compliant design with proper contrast and navigation
+- **Performance**: Optimized loading and smooth user interactions
+
+###  Design Highlights
+- **Mobile-First**: Optimized for all screen sizes with breakpoint-specific layouts
+- **Dark/Light Mode**: Adaptive theming for user preference
+- **Component Library**: Built with Radix UI for accessibility and consistency
+- **Animations**: Smooth transitions and micro-interactions using Framer Motion
+- **Typography**: Carefully chosen font hierarchy and spacing
+
+> **Note**: All screenshots show the fully responsive design working across different device sizes. The platform automatically adapts to provide the best user experience on any screen.
 
 ##  Tech Stack
 
@@ -117,15 +170,6 @@ EcomStorefront/
 - `npm run start` - Start production server
 - `npm run check` - Type checking
 - `npm run db:push` - Push database schema
-
-##  Environment Setup
-
-This project requires several environment variables to be configured. See [ENVIRONMENT_SETUP.md](./ENVIRONMENT_SETUP.md) for:
-
-- Database configuration
-- Payment provider setup (Stripe, PayPal)
-- Firebase authentication setup
-- Optional services (email, file storage, etc.)
 
 ##  Core Features
 
