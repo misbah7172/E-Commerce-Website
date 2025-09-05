@@ -4,23 +4,19 @@ import { Card, CardContent } from "@/components/ui/card";
 import { useQuery } from "@tanstack/react-query";
 import { Star, Users, Globe } from "lucide-react";
 import type { Product, Category } from "@shared/schema";
+import { useState } from "react";
 
 export default function Homepage() {
-  const { data: featuredProducts = [] } = useQuery<Product[]>({
-    queryKey: ["/api/products", { limit: 8, sortBy: "rating", sortOrder: "desc" }],
+  const [hoveredProduct, setHoveredProduct] = useState<string | null>(null);
+
+  // Get all products to find highest rated by category
+  const { data: allProducts = [] } = useQuery<Product[]>({
+    queryKey: ["/api/products"],
     queryFn: async () => {
-      const params = new URLSearchParams();
-      params.append('limit', '8');
-      params.append('sortBy', 'rating');
-      params.append('sortOrder', 'desc');
-      
-      const url = `/api/products?${params.toString()}`;
-      const response = await fetch(url);
-      
+      const response = await fetch('/api/products');
       if (!response.ok) {
-        throw new Error('Failed to fetch featured products');
+        throw new Error('Failed to fetch products');
       }
-      
       return response.json();
     },
   });
@@ -28,6 +24,32 @@ export default function Homepage() {
   const { data: categories = [] } = useQuery<Category[]>({
     queryKey: ["/api/categories"],
   });
+
+  // Get highest rated product from each category
+  const getTopProductsByCategory = () => {
+    const topProducts: Product[] = [];
+    
+    categories.forEach(category => {
+      const categoryProducts = allProducts.filter(product => 
+        product.categoryId === category.id
+      );
+      
+      if (categoryProducts.length > 0) {
+        // Sort by rating (descending) and get the highest rated
+        const topProduct = categoryProducts.sort((a, b) => {
+          const ratingA = parseFloat(a.rating || '0');
+          const ratingB = parseFloat(b.rating || '0');
+          return ratingB - ratingA;
+        })[0];
+        
+        topProducts.push(topProduct);
+      }
+    });
+    
+    return topProducts;
+  };
+
+  const topCategoryProducts = getTopProductsByCategory();
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section - Melula Style */}
@@ -60,30 +82,81 @@ export default function Homepage() {
         </div>
       </section>
 
-      {/* Product Grid Section */}
+      {/* Product Grid Section - Top Rated by Category */}
       <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-4">
-          {featuredProducts.length > 0 && (
+          <div className="text-center mb-12">
+            <h2 className="text-3xl lg:text-5xl font-bold text-gray-900 mb-4">
+              CATEGORY CHAMPIONS
+            </h2>
+            <p className="text-lg text-gray-600">
+              Highest rated products from each category
+            </p>
+          </div>
+          
+          {topCategoryProducts.length > 0 && (
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 lg:gap-8">
-              {featuredProducts.slice(0, 8).map((product) => (
-                <div key={product.id} className="group">
-                  <Link href={`/products/${product.id}`}>
-                    <div className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 group-hover:scale-105">
-                      {product.images && product.images.length > 0 ? (
-                        <img
-                          src={product.images[0]}
-                          alt={product.name}
-                          className="w-full h-64 lg:h-80 object-cover"
-                        />
-                      ) : (
-                        <div className="w-full h-64 lg:h-80 bg-gray-200 flex items-center justify-center">
-                          <span className="text-gray-400">No Image</span>
+              {topCategoryProducts.map((product) => {
+                const category = categories.find(cat => cat.id === product.categoryId);
+                
+                return (
+                  <div 
+                    key={product.id} 
+                    className="group relative"
+                    onMouseEnter={() => setHoveredProduct(product.id)}
+                    onMouseLeave={() => setHoveredProduct(null)}
+                  >
+                    <Link href={`/products/${product.id}`}>
+                      <div className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 group-hover:scale-105 relative">
+                        {/* Category Badge */}
+                        <div className="absolute top-3 left-3 z-10">
+                          <span className="bg-black text-white text-xs font-medium px-2 py-1 rounded-full">
+                            {category?.name || 'Category'}
+                          </span>
                         </div>
-                      )}
-                    </div>
-                  </Link>
-                </div>
-              ))}
+                        
+                        {/* Rating Badge */}
+                        <div className="absolute top-3 right-3 z-10">
+                          <div className="bg-yellow-400 text-black text-xs font-bold px-2 py-1 rounded-full flex items-center gap-1">
+                            <Star className="h-3 w-3 fill-current" />
+                            {product.rating || '5.0'}
+                          </div>
+                        </div>
+
+                        {product.images && product.images.length > 0 ? (
+                          <img
+                            src={product.images[0]}
+                            alt={product.name}
+                            className="w-full h-64 lg:h-80 object-cover"
+                          />
+                        ) : (
+                          <div className="w-full h-64 lg:h-80 bg-gray-200 flex items-center justify-center">
+                            <span className="text-gray-400">No Image</span>
+                          </div>
+                        )}
+
+                        {/* Hover Tooltip */}
+                        {hoveredProduct === product.id && (
+                          <div className="absolute inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 transition-all duration-300">
+                            <div className="text-white text-center space-y-2">
+                              <h3 className="font-bold text-lg line-clamp-2">{product.name}</h3>
+                              <p className="text-sm opacity-90 line-clamp-3">{product.description}</p>
+                              <div className="flex items-center justify-center gap-4 pt-2">
+                                <span className="text-xl font-bold text-green-400">${product.price}</span>
+                                <div className="flex items-center gap-1">
+                                  <Star className="h-4 w-4 text-yellow-400 fill-current" />
+                                  <span className="text-sm">{product.rating || '5.0'}</span>
+                                </div>
+                              </div>
+                              <p className="text-xs opacity-75">Click to view details</p>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </Link>
+                  </div>
+                );
+              })}
             </div>
           )}
         </div>
