@@ -135,19 +135,42 @@ export default function Checkout() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="max-w-6xl mx-auto">
+    <div className="relative min-h-screen">
+      {/* Background Images - Different for Mobile and Laptop */}
+      <div className="fixed inset-0 z-0">
+        {/* Mobile Background - Original vertical image */}
+        <div 
+          className="w-full h-full bg-cover bg-center bg-no-repeat md:hidden"
+          style={{
+            backgroundImage: 'url(/images/checkout-page-background.png)'
+          }}
+        />
+        {/* Laptop Background - Horizontal image */}
+        <div 
+          className="w-full h-full bg-cover bg-center bg-no-repeat hidden md:block"
+          style={{
+            backgroundImage: 'url(/images/checkout-page-background-laptop.png)'
+          }}
+        />
+        {/* Light overlay for better text readability */}
+        <div className="absolute inset-0 bg-black/30" />
+      </div>
+      
+      {/* Content with higher z-index */}
+      <div className="relative z-10 container mx-auto px-4 py-8 pb-24">
+        <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="flex items-center gap-4 mb-8">
-          <Button variant="ghost" onClick={() => navigate("/cart")} data-testid="button-back">
+          <Button variant="ghost" onClick={() => navigate("/cart")} data-testid="button-back" 
+                  className="bg-white/95 backdrop-blur-sm hover:bg-white text-gray-900 border border-gray-200 shadow-lg">
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Cart
           </Button>
-          <h1 className="text-2xl font-bold" data-testid="text-checkout-title">Checkout</h1>
+          <h1 className="text-2xl font-bold text-white drop-shadow-xl bg-black/30 px-4 py-2 rounded-lg backdrop-blur-sm" data-testid="text-checkout-title">Checkout</h1>
         </div>
 
         {/* Progress Indicator */}
-        <div className="mb-8">
+        <div className="mb-8 bg-white/90 backdrop-blur-sm rounded-lg p-4 shadow-lg">
           <div className="flex items-center space-x-4">
             <div className="flex items-center">
               <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
@@ -186,9 +209,9 @@ export default function Checkout() {
             {step === 1 && (
               <>
                 {/* Shipping Information */}
-                <Card>
+                <Card className="bg-white/95 backdrop-blur-sm shadow-xl border-gray-200">
                   <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
+                    <CardTitle className="flex items-center gap-2 text-gray-900">
                       <Truck className="h-5 w-5" />
                       Shipping Information
                     </CardTitle>
@@ -295,9 +318,9 @@ export default function Checkout() {
                 </Card>
 
                 {/* Shipping Options */}
-                <Card>
+                <Card className="bg-white/95 backdrop-blur-sm shadow-xl border-gray-200">
                   <CardHeader>
-                    <CardTitle>Shipping Options</CardTitle>
+                    <CardTitle className="text-gray-900">Shipping Options</CardTitle>
                   </CardHeader>
                   <CardContent>
                     <RadioGroup value={shippingMethod} onValueChange={setShippingMethod}>
@@ -340,9 +363,9 @@ export default function Checkout() {
             )}
 
             {step === 2 && (
-              <Card>
+              <Card className="bg-white/95 backdrop-blur-sm shadow-xl border-gray-200">
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
+                  <CardTitle className="flex items-center gap-2 text-gray-900">
                     <CreditCard className="h-5 w-5" />
                     Payment Method
                   </CardTitle>
@@ -431,14 +454,14 @@ export default function Checkout() {
 
           {/* Order Summary */}
           <div>
-            <Card className="sticky top-24">
+            <Card className="sticky top-24 bg-white/95 backdrop-blur-sm shadow-xl border-gray-200">
               <CardHeader>
-                <CardTitle>Order Summary</CardTitle>
+                <CardTitle className="text-gray-900">Order Summary</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 {/* Items */}
                 <div className="space-y-3">
-                  {cartItems.map((item: any) => (
+                  {(cartItems as any[]).map((item: any) => (
                     <div key={item.id} className="flex items-center space-x-3" data-testid={`order-item-${item.id}`}>
                       <img
                         src={item.product.images?.[0] || "/placeholder.jpg"}
@@ -496,6 +519,7 @@ export default function Checkout() {
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 }
