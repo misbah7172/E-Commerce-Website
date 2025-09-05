@@ -95,6 +95,41 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.json(req.user);
   });
 
+  // User profile update routes
+  app.put("/api/users/:uid/profile-image", verifyUser, async (req, res) => {
+    try {
+      const { uid } = req.params;
+      const { profileImage } = req.body;
+
+      // Verify user can only update their own profile
+      if (req.user?.firebaseUid !== uid) {
+        return res.status(403).json({ error: "Unauthorized" });
+      }
+
+      const updatedUser = await storage.updateUserProfileImage(uid, profileImage);
+      res.json(updatedUser);
+    } catch (error: any) {
+      res.status(400).json({ error: error.message });
+    }
+  });
+
+  app.put("/api/users/:uid", verifyUser, async (req, res) => {
+    try {
+      const { uid } = req.params;
+      const userData = req.body;
+
+      // Verify user can only update their own profile
+      if (req.user?.firebaseUid !== uid) {
+        return res.status(403).json({ error: "Unauthorized" });
+      }
+
+      const updatedUser = await storage.updateUserProfile(uid, userData);
+      res.json(updatedUser);
+    } catch (error: any) {
+      res.status(400).json({ error: error.message });
+    }
+  });
+
   // Products routes
   app.get("/api/products", async (req, res) => {
     try {

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -9,12 +9,14 @@ import { Switch } from "@/components/ui/switch";
 import { useAuth } from "@/components/AuthProvider";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
-import { User, Mail, Phone, MapPin, Settings } from "lucide-react";
+import { User, Mail, Phone, MapPin, Settings, Camera, Upload } from "lucide-react";
+import type { User as UserType } from "@shared/schema";
 
 export default function Profile() {
   const { user } = useAuth();
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [profileData, setProfileData] = useState({
     name: user?.displayName || "",
@@ -23,6 +25,13 @@ export default function Profile() {
   });
 
   const [emailNotifications, setEmailNotifications] = useState(true);
+  const [uploadingImage, setUploadingImage] = useState(false);
+
+  // Get current user data from database
+  const { data: currentUser } = useQuery<UserType>({
+    queryKey: ["/api/auth/me"],
+    enabled: !!user,
+  });
 
   const { data: addresses = [] } = useQuery({
     queryKey: ["/api/addresses"],
@@ -34,9 +43,14 @@ export default function Profile() {
     enabled: !!user,
   });
 
+  // Type assertions for arrays
+  const userAddresses = (addresses as any[]) || [];
+  const userOrders = (orders as any[]) || [];
+
   const updateProfileMutation = useMutation({
     mutationFn: (data: any) => apiRequest("PUT", `/api/users/${user?.uid}`, data),
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/auth/me"] });
       toast({
         title: "Profile updated",
         description: "Your profile has been updated successfully.",
@@ -50,6 +64,63 @@ export default function Profile() {
       });
     },
   });
+
+  // Convert image to base64 for simple storage (in production, use cloud storage)
+  const convertToBase64 = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = (error) => reject(error);
+    });
+  };
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      toast({
+        title: "Invalid file type",
+        description: "Please select an image file.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Validate file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      toast({
+        title: "File too large",
+        description: "Please select an image smaller than 5MB.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setUploadingImage(true);
+    try {
+      const base64Image = await convertToBase64(file);
+      await apiRequest("PUT", `/api/users/${user?.uid}/profile-image`, {
+        profileImage: base64Image,
+      });
+      
+      queryClient.invalidateQueries({ queryKey: ["/api/auth/me"] });
+      toast({
+        title: "Profile image updated",
+        description: "Your profile image has been updated successfully.",
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to upload profile image.",
+        variant: "destructive",
+      });
+    } finally {
+      setUploadingImage(false);
+    }
+  };
 
   const handleProfileUpdate = (e: React.FormEvent) => {
     e.preventDefault();
@@ -108,46 +179,92 @@ export default function Profile() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <form onSubmit={handleProfileUpdate} className="space-y-4">
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <div>
-                      <Label htmlFor="name">Full Name</Label>
-                      <Input
-                        id="name"
-                        value={profileData.name}
-                        onChange={(e) => setProfileData(prev => ({ ...prev, name: e.target.value }))}
-                        data-testid="input-profile-name"
+                <div className="space-y-6">
+                  {/* Profile Image Section */}
+                  <div className="flex items-center space-x-4">
+                    {currentUser?.profileImage ? (
+                      <img
+                        src={currentUser.profileImage}
+                        alt="Profile"
+                        className="w-20 h-20 rounded-full object-cover border-2 border-gray-200"
                       />
-                    </div>
-                    <div>
-                      <Label htmlFor="email">Email</Label>
-                      <Input
-                        id="email"
-                        type="email"
-                        value={profileData.email}
-                        onChange={(e) => setProfileData(prev => ({ ...prev, email: e.target.value }))}
-                        data-testid="input-profile-email"
+                    ) : (
+                      <div className="w-20 h-20 rounded-full bg-gray-200 flex items-center justify-center">
+                        <User className="w-8 h-8 text-gray-500" />
+                      </div>
+                    )}
+                    <div className="flex flex-col space-y-2">
+                      <input
+                        ref={fileInputRef}
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImageUpload}
+                        className="hidden"
                       />
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => fileInputRef.current?.click()}
+                        disabled={uploadingImage}
+                        className="flex items-center space-x-2"
+                      >
+                        {uploadingImage ? (
+                          <>
+                            <div className="w-4 h-4 border-2 border-gray-300 border-t-gray-600 rounded-full animate-spin" />
+                            <span>Uploading...</span>
+                          </>
+                        ) : (
+                          <>
+                            <Camera className="w-4 h-4" />
+                            <span>Change Photo</span>
+                          </>
+                        )}
+                      </Button>
                     </div>
                   </div>
-                  <div>
-                    <Label htmlFor="phone">Phone</Label>
-                    <Input
-                      id="phone"
-                      type="tel"
-                      value={profileData.phone}
-                      onChange={(e) => setProfileData(prev => ({ ...prev, phone: e.target.value }))}
-                      data-testid="input-profile-phone"
-                    />
-                  </div>
-                  <Button 
-                    type="submit" 
-                    disabled={updateProfileMutation.isPending}
-                    data-testid="button-update-profile"
-                  >
-                    {updateProfileMutation.isPending ? "Updating..." : "Update Profile"}
-                  </Button>
-                </form>
+
+                  {/* Profile Form */}
+                  <form onSubmit={handleProfileUpdate} className="space-y-4">
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div>
+                        <Label htmlFor="name">Full Name</Label>
+                        <Input
+                          id="name"
+                          value={profileData.name}
+                          onChange={(e) => setProfileData(prev => ({ ...prev, name: e.target.value }))}
+                          data-testid="input-profile-name"
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="email">Email</Label>
+                        <Input
+                          id="email"
+                          type="email"
+                          value={profileData.email}
+                          onChange={(e) => setProfileData(prev => ({ ...prev, email: e.target.value }))}
+                          data-testid="input-profile-email"
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <Label htmlFor="phone">Phone</Label>
+                      <Input
+                        id="phone"
+                        type="tel"
+                        value={profileData.phone}
+                        onChange={(e) => setProfileData(prev => ({ ...prev, phone: e.target.value }))}
+                        data-testid="input-profile-phone"
+                      />
+                    </div>
+                    <Button 
+                      type="submit" 
+                      disabled={updateProfileMutation.isPending}
+                      data-testid="button-update-profile"
+                    >
+                      {updateProfileMutation.isPending ? "Updating..." : "Update Profile"}
+                    </Button>
+                  </form>
+                </div>
               </CardContent>
             </Card>
           </TabsContent>
@@ -159,13 +276,13 @@ export default function Profile() {
                 <CardTitle>Order History</CardTitle>
               </CardHeader>
               <CardContent>
-                {orders.length === 0 ? (
+                {userOrders.length === 0 ? (
                   <div className="text-center py-8">
                     <p className="text-muted-foreground">No orders found.</p>
                   </div>
                 ) : (
                   <div className="space-y-4">
-                    {orders.slice(0, 5).map((order: any) => (
+                    {userOrders.slice(0, 5).map((order: any) => (
                       <div key={order.id} className="border border-border rounded-lg p-4" data-testid={`order-${order.id}`}>
                         <div className="flex justify-between items-start mb-2">
                           <div>
@@ -217,13 +334,13 @@ export default function Profile() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                {addresses.length === 0 ? (
+                {userAddresses.length === 0 ? (
                   <div className="text-center py-8">
                     <p className="text-muted-foreground">No addresses saved.</p>
                   </div>
                 ) : (
                   <div className="space-y-4">
-                    {addresses.map((address: any) => (
+                    {userAddresses.map((address: any) => (
                       <div key={address.id} className="border border-border rounded-lg p-4" data-testid={`address-${address.id}`}>
                         <div className="flex justify-between items-start">
                           <div>

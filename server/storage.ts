@@ -19,6 +19,8 @@ export interface IStorage {
   updateUser(id: string, user: Partial<InsertUser>): Promise<User>;
   getAllUsers(): Promise<User[]>;
   updateUserRole(id: string, role: 'customer' | 'admin'): Promise<User>;
+  updateUserProfile(firebaseUid: string, userData: Partial<InsertUser>): Promise<User>;
+  updateUserProfileImage(firebaseUid: string, profileImage: string): Promise<User>;
 
   // Products
   getProducts(filters?: {
@@ -137,6 +139,22 @@ export class DatabaseStorage implements IStorage {
 
   async updateUserRole(id: string, role: 'customer' | 'admin'): Promise<User> {
     const [updatedUser] = await db.update(users).set({ role }).where(eq(users.id, id)).returning();
+    return updatedUser;
+  }
+
+  async updateUserProfile(firebaseUid: string, userData: Partial<InsertUser>): Promise<User> {
+    const [updatedUser] = await db.update(users)
+      .set(userData)
+      .where(eq(users.firebaseUid, firebaseUid))
+      .returning();
+    return updatedUser;
+  }
+
+  async updateUserProfileImage(firebaseUid: string, profileImage: string): Promise<User> {
+    const [updatedUser] = await db.update(users)
+      .set({ profileImage })
+      .where(eq(users.firebaseUid, firebaseUid))
+      .returning();
     return updatedUser;
   }
 

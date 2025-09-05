@@ -10,6 +10,7 @@ export const users = pgTable("users", {
   email: text("email").notNull().unique(),
   name: text("name").notNull(),
   phone: text("phone"),
+  profileImage: text("profile_image"), // URL to profile image
   role: varchar("role", { enum: ["customer", "admin"] }).default("customer").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });

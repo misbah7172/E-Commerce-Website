@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { useAuth } from "@/components/AuthProvider";
 import { useToast } from "@/hooks/use-toast";
-import { Mail, Lock, Eye, EyeOff, Phone } from "lucide-react";
+import { Mail, Lock, Eye, EyeOff, Phone, Camera, User } from "lucide-react";
 
 export default function Login() {
   const [, navigate] = useLocation();
@@ -17,6 +17,8 @@ export default function Login() {
   const [isSignUp, setIsSignUp] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [profileImagePreview, setProfileImagePreview] = useState<string | null>(null);
+  const [profileImageFile, setProfileImageFile] = useState<File | null>(null);
   
   const [formData, setFormData] = useState({
     email: "",
@@ -36,6 +38,49 @@ export default function Login() {
       ...prev,
       [e.target.name]: e.target.value
     }));
+  };
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      toast({
+        title: "Invalid file type",
+        description: "Please select an image file.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Validate file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      toast({
+        title: "File too large",
+        description: "Please select an image smaller than 5MB.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setProfileImageFile(file);
+    
+    // Create preview
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      setProfileImagePreview(event.target?.result as string);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const convertToBase64 = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = (error) => reject(error);
+    });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -62,7 +107,13 @@ export default function Login() {
           return;
         }
 
-        await signUp(formData.email, formData.password, formData.name);
+        // Convert profile image to base64 if provided
+        let profileImageBase64 = null;
+        if (profileImageFile) {
+          profileImageBase64 = await convertToBase64(profileImageFile);
+        }
+
+        await signUp(formData.email, formData.password, formData.name, profileImageBase64);
         toast({
           title: "Account created!",
           description: "Welcome to ShopHub! You can now start shopping.",
@@ -124,20 +175,61 @@ export default function Login() {
         <CardContent className="space-y-4 px-4 sm:px-6">
           <form onSubmit={handleSubmit} className="space-y-4">
             {isSignUp && (
-              <div className="space-y-2">
-                <Label htmlFor="name" className="text-sm sm:text-base">Full Name</Label>
-                <Input
-                  id="name"
-                  name="name"
-                  type="text"
-                  placeholder="Enter your full name"
-                  value={formData.name}
-                  onChange={handleInputChange}
-                  required
-                  className="h-10 sm:h-11 text-sm sm:text-base"
-                  data-testid="input-name"
-                />
-              </div>
+              <>
+                <div className="space-y-2">
+                  <Label htmlFor="name" className="text-sm sm:text-base">Full Name</Label>
+                  <Input
+                    id="name"
+                    name="name"
+                    type="text"
+                    placeholder="Enter your full name"
+                    value={formData.name}
+                    onChange={handleInputChange}
+                    required
+                    className="h-10 sm:h-11 text-sm sm:text-base"
+                    data-testid="input-name"
+                  />
+                </div>
+                
+                <div className="space-y-2">
+                  <Label className="text-sm sm:text-base">Profile Picture (Optional)</Label>
+                  <div className="flex items-center space-x-4">
+                    {profileImagePreview ? (
+                      <img
+                        src={profileImagePreview}
+                        alt="Profile Preview"
+                        className="w-16 h-16 rounded-full object-cover border-2 border-gray-200"
+                      />
+                    ) : (
+                      <div className="w-16 h-16 rounded-full bg-gray-200 flex items-center justify-center border-2 border-gray-200">
+                        <User className="w-6 h-6 text-gray-500" />
+                      </div>
+                    )}
+                    <div className="flex-1">
+                      <input
+                        id="profileImage"
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImageChange}
+                        className="hidden"
+                        data-testid="input-profile-image"
+                      />
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => document.getElementById('profileImage')?.click()}
+                        className="flex items-center space-x-2 text-sm"
+                      >
+                        <Camera className="w-4 h-4" />
+                        <span>Choose Photo</span>
+                      </Button>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        Max 5MB, JPG/PNG/GIF
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </>
             )}
             
             <div className="space-y-2">

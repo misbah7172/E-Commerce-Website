@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useQuery } from "@tanstack/react-query";
 import { Search, ShoppingCart, User, Heart, Menu } from "lucide-react";
-import type { CartItem, Product, WishlistItem, Category } from "@shared/schema";
+import type { CartItem, Product, WishlistItem, Category, User as UserType } from "@shared/schema";
 
 interface HeaderProps {
   onCartClick?: () => void;
@@ -35,6 +35,11 @@ export default function Header({ onCartClick }: HeaderProps) {
 
   const { data: categories = [] } = useQuery<Category[]>({
     queryKey: ["/api/categories"],
+  });
+
+  const { data: currentUser } = useQuery<UserType>({
+    queryKey: ["/api/auth/me"],
+    enabled: !!user,
   });
 
   const handleSearch = (e: React.FormEvent) => {
@@ -107,8 +112,16 @@ export default function Header({ onCartClick }: HeaderProps) {
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button variant="ghost" size="sm" className="flex items-center space-x-1 sm:space-x-2 p-2">
-                        <User className="h-4 w-4 sm:h-5 sm:w-5" />
-                        <span className="hidden sm:inline text-sm">{user.displayName || user.email}</span>
+                        {currentUser?.profileImage || user.photoURL ? (
+                          <img
+                            src={currentUser?.profileImage || user.photoURL || ''}
+                            alt="Profile"
+                            className="h-6 w-6 sm:h-7 sm:w-7 rounded-full object-cover border border-gray-200"
+                          />
+                        ) : (
+                          <User className="h-4 w-4 sm:h-5 sm:w-5" />
+                        )}
+                        <span className="hidden sm:inline text-sm">{currentUser?.name || user.displayName || user.email}</span>
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end" className="w-48">

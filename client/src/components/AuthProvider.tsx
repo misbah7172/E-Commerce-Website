@@ -7,7 +7,7 @@ interface AuthContextType {
   user: User | null;
   loading: boolean;
   signIn: (email: string, password: string) => Promise<void>;
-  signUp: (email: string, password: string, name: string) => Promise<void>;
+  signUp: (email: string, password: string, name: string, profileImage?: string | null) => Promise<void>;
   signInWithGoogle: () => Promise<void>;
   logout: () => Promise<void>;
   isAdmin: boolean;
@@ -47,6 +47,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
               firebaseUid: firebaseUser.uid,
               email: firebaseUser.email!,
               name: firebaseUser.displayName || firebaseUser.email!.split("@")[0],
+              profileImage: firebaseUser.photoURL || null, // Get Google profile image
               role: "customer",
             });
           }
@@ -70,7 +71,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     await signInWithEmailAndPassword(auth, email, password);
   };
 
-  const signUp = async (email: string, password: string, name: string) => {
+  const signUp = async (email: string, password: string, name: string, profileImage?: string | null) => {
     const result = await createUserWithEmailAndPassword(auth, email, password);
     
     // Create user in database
@@ -78,6 +79,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       firebaseUid: result.user.uid,
       email: result.user.email!,
       name,
+      profileImage: profileImage || null, // Use provided image or null
       role: "customer",
     });
   };
@@ -92,6 +94,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         firebaseUid: result.user.uid,
         email: result.user.email!,
         name: result.user.displayName || result.user.email!.split("@")[0],
+        profileImage: result.user.photoURL || null, // Get Google profile image
         role: "customer",
       });
     } catch (error) {

@@ -2,23 +2,6 @@
 
 A modern, full-stack e-commerce platform built with React, TypeScript, Node.js, and PostgreSQL.
 
-##  Table of Contents
-
-- [Features](#features)
-- [Screenshots](#screenshots)
-- [Tech Stack](#tech-stack)
-- [Prerequisites](#prerequisites)
-- [Quick Start](#quick-start)
-- [Project Structure](#project-structure)
-- [Available Scripts](#available-scripts)
-- [Environment Setup](#environment-setup)
-- [Core Features](#core-features)
-- [Deployment](#deployment)
-- [API Documentation](#api-documentation)
-- [Contributing](#contributing)
-- [License](#license)
-- [Support](#support)
-
 ##  Features
 
 - **Modern UI**: Built with React 18, TypeScript, and Tailwind CSS
@@ -31,7 +14,7 @@ A modern, full-stack e-commerce platform built with React, TypeScript, Node.js, 
 - **Admin Dashboard**: Product and order management interface
 - **Search & Filtering**: Advanced product search and category filtering
 
-## 📸 Screenshots
+## Screenshots
 
 Get a visual overview of the ShopHub e-commerce platform:
 
