@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "wouter";
 import { useQuery } from "@tanstack/react-query";
-import ProductCard from "@/components/ProductCard";
+import ProductCardWithSlider from "@/components/ProductCardWithSlider";
+import ProductHeroSlider from "@/components/ProductHeroSlider";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -86,6 +87,13 @@ export default function Products() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Hero Slider */}
+      <ProductHeroSlider 
+        title="Products"
+        subtitle="Discover our amazing collection of premium products"
+        breadcrumb="HOME / SHOP / PRODUCTS"
+      />
+      
       <div className="container mx-auto px-4 py-6 sm:py-8">
         {/* Search Bar */}
         <div className="mb-6 sm:mb-8">
@@ -258,7 +266,7 @@ export default function Products() {
                   : "space-y-4"
               }>
                 {products.map((product: Product) => (
-                  <ProductCard key={product.id} product={product} />
+                  <ProductCardWithSlider key={product.id} product={product} viewMode={viewMode} />
                 ))}
               </div>
             )}
