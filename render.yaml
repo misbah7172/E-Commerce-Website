@@ -1,0 +1,25 @@
+services:
+  # PostgreSQL Database
+  - type: pserv
+    name: ecommerce-db
+    env: postgresql
+    plan: free
+    databases:
+      - name: ecommerce
+        user: ecommerce_user
+
+  # Web Service for the full-stack application
+  - type: web
+    name: ecommerce-app
+    env: node
+    plan: free
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: ecommerce-db
+          property: connectionString

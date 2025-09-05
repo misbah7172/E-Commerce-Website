@@ -1,0 +1,66 @@
+# Files and directories to ignore during Render deployment
+
+# Development files
+.env
+.env.local
+.env.development
+.env.test
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Testing
+coverage/
+.nyc_output
+
+# Documentation drafts
+*.draft.md
+docs/drafts/
+
+# Temporary files
+tmp/
+temp/
+.tmp/
+
+# Cache directories
+.cache/
+.parcel-cache/
+
+# Build artifacts (will be rebuilt)
+dist/
+build/
+
+# Dependencies (will be reinstalled)
+node_modules/
+
+# Development tools
+.replit
+replit.nix
+
+# Git
+.git/
+.gitignore
+
+# Scripts that are not needed in production
+deploy-setup.sh
+health-check.sh
